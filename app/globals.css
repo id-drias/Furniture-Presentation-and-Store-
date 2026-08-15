@@ -1,0 +1,370 @@
+@import "tailwindcss";
+
+/* ==================================================================== *
+ * AETHERIA ATELIER — DESIGN TOKENS
+ * Alabaster canvas · ceramic surfaces · obsidian type · champagne metal
+ * ==================================================================== */
+
+@theme {
+  /* --- surface --- */
+  --color-alabaster: #ffffff;
+  --color-ceramic: #f8fafc;
+  --color-ceramic-deep: #f1f5f9;
+  --color-ceramic-warm: #f7f5f1;
+
+  /* --- ink --- */
+  --color-obsidian: #0f172a;
+  --color-ink-soft: #475569;
+  --color-ink-faint: #94a3b8;
+  --color-ink-ghost: #cbd5e1;
+
+  /* --- metal --- */
+  --color-champagne: #c2a87c;
+  --color-champagne-deep: #a3854f;
+  --color-champagne-pale: #efe6d4;
+  --color-platinum: #d9d6d0;
+
+  /* --- type --- */
+  --font-sans: var(--font-inter), ui-sans-serif, -apple-system,
+    BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  --font-display: var(--font-instrument), "Times New Roman", Georgia, serif;
+
+  /* --- elevation: soft, layered, never a drop shadow --- */
+  --shadow-plate: 0 1px 2px rgba(15, 23, 42, 0.04),
+    0 12px 32px -12px rgba(15, 23, 42, 0.1);
+  --shadow-lift: 0 2px 4px rgba(15, 23, 42, 0.04),
+    0 28px 60px -20px rgba(15, 23, 42, 0.18);
+  --shadow-glass: 0 1px 1px rgba(255, 255, 255, 0.7) inset,
+    0 8px 32px -8px rgba(15, 23, 42, 0.12);
+  --shadow-drawer: -32px 0 80px -24px rgba(15, 23, 42, 0.24);
+
+  /* --- motion --- */
+  --ease-apple: cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+/* ==================================================================== *
+ * BASE
+ * ==================================================================== */
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    /* clear the floating glass header on anchor jumps */
+    scroll-padding-top: 7.5rem;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-alabaster);
+    color: var(--color-obsidian);
+    font-family: var(--font-sans);
+    font-feature-settings: "cv02", "cv03", "cv04", "ss01";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* `clip` (not `hidden`) — `hidden` would create a scroll container and
+       break every position:sticky pinned section on the page. */
+    overflow-x: clip;
+  }
+
+  ::selection {
+    background: var(--color-champagne-pale);
+    color: var(--color-obsidian);
+  }
+
+  /* Hairline focus ring that matches the metal accent. */
+  :focus-visible {
+    outline: 2px solid var(--color-champagne-deep);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  /* Slim, near-invisible scrollbar. */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-ink-ghost) transparent;
+  }
+  *::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  *::-webkit-scrollbar-thumb {
+    background: var(--color-ink-ghost);
+    border-radius: 99px;
+  }
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  /* Numerals stay tabular anywhere they can shift layout. */
+  .tnum,
+  input[type="number"] {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* ==================================================================== *
+ * COMPONENTS
+ * In @layer components so Tailwind utilities can still override them.
+ * ==================================================================== */
+
+@layer components {
+  /* --- Editorial display type ------------------------------------- */
+
+  .display {
+    font-weight: 600;
+    letter-spacing: -0.045em;
+    line-height: 0.9;
+    text-wrap: balance;
+  }
+
+  .display-hero {
+    font-weight: 600;
+    letter-spacing: -0.05em;
+    line-height: 0.86;
+    font-size: clamp(3rem, 10.5vw, 10.5rem);
+  }
+
+  .display-section {
+    font-weight: 600;
+    letter-spacing: -0.042em;
+    line-height: 0.92;
+    font-size: clamp(2.25rem, 6.2vw, 5.25rem);
+    text-wrap: balance;
+  }
+
+  /* The serif italic that carries the accent half of every headline. */
+  .accent-serif {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+  }
+
+  .eyebrow {
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    color: var(--color-ink-faint);
+  }
+
+  /* --- Surfaces ---------------------------------------------------- */
+
+  .hairline {
+    border: 1px solid rgba(15, 23, 42, 0.08);
+  }
+  .hairline-t {
+    border-top: 1px solid rgba(15, 23, 42, 0.08);
+  }
+  .hairline-b {
+    border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+  }
+  .hairline-y {
+    border-top: 1px solid rgba(15, 23, 42, 0.08);
+    border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+  }
+
+  /* Horizontal rails scroll, but the bar itself is noise. */
+  .scrollbar-none {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+
+  .glass {
+    background: rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.75);
+    box-shadow: var(--shadow-glass);
+  }
+
+  .glass-deep {
+    background: rgba(255, 255, 255, 0.86);
+    backdrop-filter: blur(40px) saturate(190%);
+    -webkit-backdrop-filter: blur(40px) saturate(190%);
+  }
+
+  /* Brushed-metal rule used under eyebrows and section breaks. */
+  .rule-metal {
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      var(--color-champagne) 18%,
+      var(--color-platinum) 50%,
+      var(--color-champagne) 82%,
+      transparent
+    );
+    opacity: 0.55;
+  }
+
+  .text-metal {
+    background: linear-gradient(
+      100deg,
+      var(--color-champagne-deep),
+      var(--color-champagne) 30%,
+      #efe6d4 48%,
+      var(--color-champagne) 66%,
+      var(--color-champagne-deep)
+    );
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: sheen 9s ease-in-out infinite;
+  }
+
+  /* --- Film grain: the single cheapest luxury cue there is --------- */
+
+  .grain::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.035;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 240px 240px;
+  }
+
+  /* --- Caustics: the zero-dependency ambient light field ----------- */
+
+  .caustics {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .caustics::before,
+  .caustics::after {
+    content: "";
+    position: absolute;
+    inset: -30%;
+    background:
+      radial-gradient(
+        38% 30% at 22% 28%,
+        rgba(255, 252, 244, 0.95) 0%,
+        rgba(255, 250, 238, 0) 62%
+      ),
+      radial-gradient(
+        30% 26% at 72% 22%,
+        rgba(239, 230, 212, 0.85) 0%,
+        rgba(239, 230, 212, 0) 60%
+      ),
+      radial-gradient(
+        44% 34% at 58% 74%,
+        rgba(255, 255, 255, 0.9) 0%,
+        rgba(255, 255, 255, 0) 64%
+      );
+    filter: blur(46px);
+    mix-blend-mode: screen;
+    animation: drift 26s var(--ease-apple) infinite alternate;
+    will-change: transform, opacity;
+  }
+
+  .caustics::after {
+    animation: drift-b 34s var(--ease-apple) infinite alternate;
+    opacity: 0.7;
+  }
+
+  /* --- Utility bits ------------------------------------------------ */
+
+  .plate {
+    box-shadow: var(--shadow-plate);
+  }
+  .plate-lift {
+    box-shadow: var(--shadow-lift);
+  }
+
+  /* Kills the blue tap flash on iOS without killing focus rings. */
+  .tap-clean {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Perspective root for the tilting product plates. */
+  .stage-3d {
+    perspective: 1400px;
+    transform-style: preserve-3d;
+  }
+}
+
+/* ==================================================================== *
+ * KEYFRAMES
+ * ==================================================================== */
+
+@keyframes drift {
+  0% {
+    transform: translate3d(-4%, -3%, 0) scale(1);
+    opacity: 0.85;
+  }
+  50% {
+    transform: translate3d(4%, 2%, 0) scale(1.12);
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(-2%, 5%, 0) scale(1.04);
+    opacity: 0.8;
+  }
+}
+
+@keyframes drift-b {
+  0% {
+    transform: translate3d(5%, 4%, 0) scale(1.08) rotate(0deg);
+  }
+  100% {
+    transform: translate3d(-6%, -4%, 0) scale(1) rotate(6deg);
+  }
+}
+
+@keyframes sheen {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.marquee-track {
+  animation: marquee 46s linear infinite;
+}
+
+/* ==================================================================== *
+ * REDUCED MOTION
+ * Ambient loops stop entirely; entrances collapse to a plain fade.
+ * ==================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .caustics::before,
+  .caustics::after,
+  .marquee-track,
+  .text-metal {
+    animation: none !important;
+  }
+
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
