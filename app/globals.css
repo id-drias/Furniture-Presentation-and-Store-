@@ -1,70 +1,59 @@
 @import "tailwindcss";
 
 /* ==================================================================== *
- * AETHERIA ATELIER — DESIGN TOKENS
+ * AETHERIA ATELIER — QUIET LUXURY
  *
- * Alabaster canvas · ceramic surfaces · obsidian type · struck metal.
+ * Alabaster canvas · architectural ceramic · obsidian type ·
+ * 0.5px champagne rules.
  *
- * The metallic layer is deliberately *conditional*. At rest a card is a
- * hairline on white; the gold edge, the light spill and the specular
- * bloom arrive on hover, on scroll, on focus. Opulence that responds
- * reads expensive — opulence that shouts constantly reads cheap.
+ * The whole system is subtractive. There is no glow, no gradient fill,
+ * no animated sheen. Expense is carried by three things only: the size
+ * of the type, the size of the emptiness around it, and the precision
+ * of a half-pixel line. Anything that draws attention to itself as an
+ * effect has been removed.
  * ==================================================================== */
 
 @theme {
   /* --- surface --- */
   --color-alabaster: #ffffff;
-  --color-ceramic: #f8fafc;
-  --color-ceramic-deep: #f1f5f9;
-  --color-ceramic-warm: #f7f5f1;
+  --color-ceramic: #f9fafb;
+  --color-ceramic-deep: #f3f4f6;
+  --color-onyx: #080c16;
 
   /* --- ink --- */
   --color-obsidian: #0f172a;
-  --color-onyx: #080c16;
-  --color-ink-soft: #475569;
-  --color-ink-faint: #94a3b8;
-  --color-ink-ghost: #cbd5e1;
+  --color-ink-soft: #4b5563;
+  --color-ink-faint: #9ca3af;
+  --color-ink-ghost: #d1d5db;
 
-  /* --- struck metal --- */
-  --color-gold: #d4af37;
-  --color-gold-light: #f0e2ab;
-  --color-gold-deep: #a8842a;
-  --color-champagne: #c2a87c;
-  --color-champagne-pale: #efe6d4;
-  --color-bronze: #b0763d;
-  --color-bronze-deep: #7d5326;
-  --color-chrome: #dfe3e8;
-  --color-chrome-deep: #9aa3ad;
-  --color-platinum: #d9d6d0;
+  /* --- metal, used only as line --- */
+  /* Desaturated on purpose. #d4af37 is a colour; these are materials. */
+  --color-champagne: #c8b79a;
+  --color-champagne-deep: #a89478;
+  --color-platinum: #d8d5cf;
 
   /* --- type --- */
   --font-sans: var(--font-inter), ui-sans-serif, -apple-system,
     BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
   --font-display: var(--font-instrument), "Times New Roman", Georgia, serif;
 
-  /* --- elevation --- */
-  --shadow-plate: 0 1px 2px rgba(15, 23, 42, 0.04),
-    0 12px 32px -12px rgba(15, 23, 42, 0.1);
-  --shadow-lift: 0 2px 4px rgba(15, 23, 42, 0.04),
-    0 28px 60px -20px rgba(15, 23, 42, 0.18);
-  --shadow-drawer: -32px 0 80px -24px rgba(15, 23, 42, 0.24);
+  /* --- hairlines --- */
+  --hairline-w: 0.5px;
+  --hairline-ink: rgba(15, 23, 42, 0.1);
+  --hairline-ink-soft: rgba(15, 23, 42, 0.06);
+  --hairline-metal: rgba(200, 183, 154, 0.55);
+  --hairline-light: rgba(255, 255, 255, 0.22);
 
-  /* Multi-layer specular glass: a bright top edge, a dimmer bottom
-     reflection, then the cast shadow. Three layers is what separates
-     "frosted panel" from "a piece of polished glass". */
-  --shadow-gloss: inset 0 1px 0 rgba(255, 255, 255, 0.95),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.4),
-    inset 0 0 24px rgba(255, 255, 255, 0.28),
-    0 8px 32px -8px rgba(15, 23, 42, 0.14);
+  /* --- elevation: shadow is structure, never drama --- */
+  --shadow-plate: 0 1px 2px rgba(15, 23, 42, 0.03),
+    0 16px 40px -20px rgba(15, 23, 42, 0.1);
+  --shadow-lift: 0 2px 6px rgba(15, 23, 42, 0.04),
+    0 40px 80px -32px rgba(15, 23, 42, 0.16);
+  --shadow-drawer: -40px 0 100px -32px rgba(15, 23, 42, 0.2);
 
-  --shadow-gloss-dark: inset 0 1px 0 rgba(255, 255, 255, 0.22),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.06),
-    inset 0 0 32px rgba(255, 255, 255, 0.05),
-    0 12px 40px -12px rgba(0, 0, 0, 0.6);
-
-  /* --- light spill (the exact value from the brief) --- */
-  --glow-gold: 0 0 35px rgba(212, 175, 55, 0.15);
-  --glow-gold-strong: 0 0 60px rgba(212, 175, 55, 0.28);
+  /* --- spatial rhythm --- */
+  --space-section: clamp(7rem, 14vw, 15rem);
+  --space-block: clamp(3.5rem, 7vw, 7rem);
 
   /* --- motion --- */
   --ease-apple: cubic-bezier(0.22, 0.61, 0.36, 1);
@@ -77,7 +66,7 @@
 @layer base {
   html {
     scroll-behavior: smooth;
-    scroll-padding-top: 7.5rem;
+    scroll-padding-top: 8rem;
     -webkit-text-size-adjust: 100%;
   }
 
@@ -88,20 +77,20 @@
     font-feature-settings: "cv02", "cv03", "cv04", "ss01";
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    /* `clip`, never `hidden` — `hidden` creates a scroll container and
-       breaks every position:sticky pinned section on the page. */
+    /* `clip`, never `hidden` — hidden creates a scroll container and
+       breaks every position:sticky section on the page. */
     overflow-x: clip;
   }
 
   ::selection {
-    background: var(--color-gold-light);
+    background: rgba(200, 183, 154, 0.25);
     color: var(--color-obsidian);
   }
 
   :focus-visible {
-    outline: 2px solid var(--color-gold-deep);
-    outline-offset: 3px;
-    border-radius: 4px;
+    outline: 1px solid var(--color-obsidian);
+    outline-offset: 4px;
+    border-radius: 2px;
   }
 
   * {
@@ -109,8 +98,8 @@
     scrollbar-color: var(--color-ink-ghost) transparent;
   }
   *::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: 6px;
+    height: 6px;
   }
   *::-webkit-scrollbar-thumb {
     background: var(--color-ink-ghost);
@@ -131,28 +120,31 @@
  * ==================================================================== */
 
 @layer components {
-  /* --- Editorial display type -------------------------------------- */
+  /* --- Editorial scale ---------------------------------------------- *
+   * Two registers and nothing between them: monumental display, and a
+   * small tracked-out technical label. The gap between the two is the
+   * entire typographic idea.
+   * ------------------------------------------------------------------ */
 
   .display {
-    font-weight: 600;
-    letter-spacing: -0.045em;
-    line-height: 0.9;
+    font-weight: 550;
+    letter-spacing: -0.04em;
+    line-height: 0.94;
     text-wrap: balance;
   }
 
-  /* Museum scale. Runs to 13rem on a wide desktop. */
   .display-hero {
-    font-weight: 600;
-    letter-spacing: -0.055em;
-    line-height: 0.84;
-    font-size: clamp(3.25rem, 11.5vw, 13rem);
+    font-weight: 550;
+    letter-spacing: -0.052em;
+    line-height: 0.88;
+    font-size: clamp(3.25rem, 10.5vw, 12rem);
   }
 
   .display-section {
-    font-weight: 600;
+    font-weight: 550;
     letter-spacing: -0.045em;
-    line-height: 0.9;
-    font-size: clamp(2.5rem, 7vw, 6.5rem);
+    line-height: 0.92;
+    font-size: clamp(2.5rem, 6.5vw, 6rem);
     text-wrap: balance;
   }
 
@@ -160,269 +152,98 @@
     font-family: var(--font-display);
     font-style: italic;
     font-weight: 400;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.015em;
   }
 
-  .eyebrow {
+  /* The technical register. Small, tracked wide, never bold. */
+  .label {
     font-size: 0.6875rem;
     font-weight: 500;
-    letter-spacing: 0.26em;
+    letter-spacing: 0.2em;
     text-transform: uppercase;
     color: var(--color-ink-faint);
   }
 
-  /* --- Struck-metal text ------------------------------------------- */
-  /* Impact words only. A whole headline in gradient reads as a logo, and
-     a logo the size of a wall reads as a casino. */
-
-  .text-metal {
-    background: linear-gradient(
-      100deg,
-      var(--color-gold-deep) 0%,
-      var(--color-gold) 22%,
-      #fbf3d5 44%,
-      var(--color-gold) 62%,
-      var(--color-bronze) 82%,
-      var(--color-gold-deep) 100%
-    );
-    background-size: 220% 100%;
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    animation: sheen 11s ease-in-out infinite;
+  .label-ink {
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-obsidian);
   }
 
-  .text-chrome {
-    background: linear-gradient(
-      100deg,
-      var(--color-chrome-deep),
-      #ffffff 42%,
-      var(--color-chrome) 58%,
-      var(--color-chrome-deep)
-    );
-    background-size: 220% 100%;
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    animation: sheen 13s ease-in-out infinite;
-  }
-
-  /* --- Surfaces ---------------------------------------------------- */
+  /* --- Hairlines ---------------------------------------------------- *
+   * 0.5px. On a 2x display this is a true half-pixel; on a 1x display
+   * the browser floors it to the thinnest line it can draw. Either way
+   * it reads as a drawn rule rather than a border.
+   * ------------------------------------------------------------------ */
 
   .hairline {
-    border: 1px solid rgba(15, 23, 42, 0.08);
+    border: var(--hairline-w) solid var(--hairline-ink);
   }
   .hairline-t {
-    border-top: 1px solid rgba(15, 23, 42, 0.08);
+    border-top: var(--hairline-w) solid var(--hairline-ink);
   }
   .hairline-b {
-    border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+    border-bottom: var(--hairline-w) solid var(--hairline-ink);
   }
   .hairline-y {
-    border-top: 1px solid rgba(15, 23, 42, 0.08);
-    border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+    border-top: var(--hairline-w) solid var(--hairline-ink);
+    border-bottom: var(--hairline-w) solid var(--hairline-ink);
+  }
+  .hairline-soft {
+    border: var(--hairline-w) solid var(--hairline-ink-soft);
+  }
+  /* The one place metal appears as a border. */
+  .hairline-metal {
+    border: var(--hairline-w) solid var(--hairline-metal);
   }
 
-  /* High-gloss glass. */
+  /* A drawn rule. scaleY keeps it a true hairline at any DPR. */
+  .rule {
+    height: 1px;
+    transform: scaleY(0.5);
+    transform-origin: top;
+    background: var(--hairline-ink);
+  }
+  .rule-metal {
+    height: 1px;
+    transform: scaleY(0.5);
+    transform-origin: top;
+    background: var(--color-champagne);
+    opacity: 0.75;
+  }
+
+  /* --- Glass -------------------------------------------------------- *
+   * One specular top edge. No inner bloom, no second reflection.
+   * ------------------------------------------------------------------ */
+
   .glass {
-    background: linear-gradient(
-      160deg,
-      rgba(255, 255, 255, 0.82) 0%,
-      rgba(255, 255, 255, 0.66) 100%
-    );
-    backdrop-filter: blur(28px) saturate(190%);
-    -webkit-backdrop-filter: blur(28px) saturate(190%);
-    border: 1px solid rgba(255, 255, 255, 0.85);
-    box-shadow: var(--shadow-gloss);
+    background: rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(32px) saturate(180%);
+    -webkit-backdrop-filter: blur(32px) saturate(180%);
+    border: var(--hairline-w) solid rgba(255, 255, 255, 0.6);
+    box-shadow:
+      inset 0 0.5px 0 rgba(255, 255, 255, 0.9),
+      0 8px 40px -16px rgba(15, 23, 42, 0.1);
   }
 
   .glass-deep {
-    background: linear-gradient(
-      160deg,
-      rgba(255, 255, 255, 0.93) 0%,
-      rgba(255, 255, 255, 0.84) 100%
-    );
-    backdrop-filter: blur(44px) saturate(200%);
-    -webkit-backdrop-filter: blur(44px) saturate(200%);
+    background: rgba(255, 255, 255, 0.94);
+    backdrop-filter: blur(48px) saturate(190%);
+    -webkit-backdrop-filter: blur(48px) saturate(190%);
   }
 
-  /* Glass over dark footage — the hero control cluster and spec chips. */
+  /* Over footage. */
   .glass-dark {
-    background: linear-gradient(
-      160deg,
-      rgba(255, 255, 255, 0.16) 0%,
-      rgba(255, 255, 255, 0.07) 100%
-    );
-    backdrop-filter: blur(24px) saturate(170%);
-    -webkit-backdrop-filter: blur(24px) saturate(170%);
-    border: 1px solid rgba(255, 255, 255, 0.22);
-    box-shadow: var(--shadow-gloss-dark);
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(28px) saturate(160%);
+    -webkit-backdrop-filter: blur(28px) saturate(160%);
+    border: var(--hairline-w) solid var(--hairline-light);
+    box-shadow: inset 0 0.5px 0 rgba(255, 255, 255, 0.18);
   }
 
-  /* --- Specular metal edge ----------------------------------------- */
-  /* A true gradient border: paint the gradient in the 1px padding ring
-     and mask out the middle. Hidden at rest, bloomed by .group:hover. */
-
-  .edge-metal {
-    position: relative;
-    isolation: isolate;
-  }
-
-  .edge-metal::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    padding: 1px;
-    background: linear-gradient(
-      140deg,
-      rgba(212, 175, 55, 0.95) 0%,
-      rgba(240, 226, 171, 0.5) 26%,
-      rgba(255, 255, 255, 0) 52%,
-      rgba(176, 118, 61, 0.55) 78%,
-      rgba(212, 175, 55, 0.9) 100%
-    );
-    -webkit-mask:
-      linear-gradient(#000 0 0) content-box,
-      linear-gradient(#000 0 0);
-    -webkit-mask-composite: xor;
-    mask:
-      linear-gradient(#000 0 0) content-box,
-      linear-gradient(#000 0 0);
-    mask-composite: exclude;
-    opacity: 0;
-    transition: opacity 0.55s var(--ease-apple);
-    pointer-events: none;
-    z-index: 2;
-  }
-
-  .edge-metal-on::after,
-  .group:hover .edge-metal::after,
-  .group:focus-visible .edge-metal::after {
-    opacity: 1;
-  }
-
-  /* --- Light spill -------------------------------------------------- */
-
-  .glow-gold {
-    filter: drop-shadow(0 0 35px rgba(212, 175, 55, 0.15));
-  }
-
-  .glow-gold-hover {
-    transition: filter 0.6s var(--ease-apple);
-  }
-  .group:hover .glow-gold-hover {
-    filter: drop-shadow(0 0 35px rgba(212, 175, 55, 0.15));
-  }
-
-  /* Ambient bloom placed behind a section. Purely decorative. */
-  .spill {
-    position: absolute;
-    pointer-events: none;
-    border-radius: 9999px;
-    filter: blur(90px);
-    opacity: 0.5;
-  }
-  .spill-gold {
-    background: radial-gradient(
-      circle,
-      rgba(212, 175, 55, 0.4) 0%,
-      rgba(212, 175, 55, 0) 70%
-    );
-  }
-  .spill-bronze {
-    background: radial-gradient(
-      circle,
-      rgba(176, 118, 61, 0.32) 0%,
-      rgba(176, 118, 61, 0) 70%
-    );
-  }
-
-  /* Brushed rule. */
-  .rule-metal {
-    height: 1px;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      var(--color-gold) 18%,
-      var(--color-gold-light) 50%,
-      var(--color-gold) 82%,
-      transparent
-    );
-    opacity: 0.7;
-  }
-
-  /* --- Film grain --------------------------------------------------- */
-
-  .grain::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    opacity: 0.035;
-    mix-blend-mode: multiply;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E");
-    background-size: 240px 240px;
-    z-index: 30;
-  }
-
-  /* Grain over footage: screen-blended so it lifts rather than muddies,
-     and heavier, because grain is what makes 480p upscaling read as
-     "cinematic" instead of "low resolution". */
-  .grain-film::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    opacity: 0.11;
-    mix-blend-mode: overlay;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23f)'/%3E%3C/svg%3E");
-    background-size: 200px 200px;
-    z-index: 20;
-  }
-
-  /* --- Caustics fallback -------------------------------------------- */
-
-  .caustics {
-    position: absolute;
-    inset: 0;
-    overflow: hidden;
-    pointer-events: none;
-  }
-
-  .caustics::before,
-  .caustics::after {
-    content: "";
-    position: absolute;
-    inset: -30%;
-    background:
-      radial-gradient(
-        38% 30% at 22% 28%,
-        rgba(255, 252, 244, 0.95) 0%,
-        rgba(255, 250, 238, 0) 62%
-      ),
-      radial-gradient(
-        30% 26% at 72% 22%,
-        rgba(240, 226, 171, 0.85) 0%,
-        rgba(240, 226, 171, 0) 60%
-      ),
-      radial-gradient(
-        44% 34% at 58% 74%,
-        rgba(255, 255, 255, 0.9) 0%,
-        rgba(255, 255, 255, 0) 64%
-      );
-    filter: blur(46px);
-    mix-blend-mode: screen;
-    animation: drift 26s var(--ease-apple) infinite alternate;
-    will-change: transform, opacity;
-  }
-
-  .caustics::after {
-    animation: drift-b 34s var(--ease-apple) infinite alternate;
-    opacity: 0.7;
-  }
-
-  /* --- Utility bits -------------------------------------------------- */
+  /* --- Surfaces ----------------------------------------------------- */
 
   .plate {
     box-shadow: var(--shadow-plate);
@@ -436,7 +257,7 @@
   }
 
   .stage-3d {
-    perspective: 1400px;
+    perspective: 1600px;
     transform-style: preserve-3d;
   }
 
@@ -447,6 +268,70 @@
   .scrollbar-none::-webkit-scrollbar {
     display: none;
   }
+
+  /* --- Grain -------------------------------------------------------- *
+   * Halved from the previous pass. At this weight it is not a texture
+   * you notice; it only stops large flat fields from banding.
+   * ------------------------------------------------------------------ */
+
+  .grain::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.018;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 240px 240px;
+    z-index: 30;
+  }
+
+  /* Over footage, where grain does real work: it hides the upscaling of
+     a 480p source far better than any amount of sharpening. */
+  .grain-film::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.07;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23f)'/%3E%3C/svg%3E");
+    background-size: 200px 200px;
+    z-index: 20;
+  }
+
+  /* --- Ambient light fallback --------------------------------------- *
+   * Used only when a video slot has no source. Reduced to a slow,
+   * near-invisible warming of the surface.
+   * ------------------------------------------------------------------ */
+
+  .caustics {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .caustics::before {
+    content: "";
+    position: absolute;
+    inset: -30%;
+    background:
+      radial-gradient(
+        40% 32% at 26% 30%,
+        rgba(255, 253, 248, 0.9) 0%,
+        rgba(255, 253, 248, 0) 64%
+      ),
+      radial-gradient(
+        44% 34% at 62% 72%,
+        rgba(255, 255, 255, 0.85) 0%,
+        rgba(255, 255, 255, 0) 66%
+      );
+    filter: blur(56px);
+    mix-blend-mode: screen;
+    animation: drift 34s var(--ease-apple) infinite alternate;
+    will-change: transform;
+  }
 }
 
 /* ==================================================================== *
@@ -455,35 +340,10 @@
 
 @keyframes drift {
   0% {
-    transform: translate3d(-4%, -3%, 0) scale(1);
-    opacity: 0.85;
-  }
-  50% {
-    transform: translate3d(4%, 2%, 0) scale(1.12);
-    opacity: 1;
+    transform: translate3d(-3%, -2%, 0) scale(1);
   }
   100% {
-    transform: translate3d(-2%, 5%, 0) scale(1.04);
-    opacity: 0.8;
-  }
-}
-
-@keyframes drift-b {
-  0% {
-    transform: translate3d(5%, 4%, 0) scale(1.08) rotate(0deg);
-  }
-  100% {
-    transform: translate3d(-6%, -4%, 0) scale(1) rotate(6deg);
-  }
-}
-
-@keyframes sheen {
-  0%,
-  100% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
+    transform: translate3d(3%, 3%, 0) scale(1.08);
   }
 }
 
@@ -497,17 +357,17 @@
 }
 
 .marquee-track {
-  animation: marquee 46s linear infinite;
+  animation: marquee 64s linear infinite;
 }
 
-/* Very slow ken-burns under the hero footage, so a 4s loop still feels
-   like it is going somewhere. */
+/* A very slow push under the hero footage, so a 4s loop still reads as
+   a moving image rather than a repeating clip. */
 @keyframes hero-drift {
   0% {
-    transform: scale(1.06) translate3d(0, 0, 0);
+    transform: scale(1.04);
   }
   100% {
-    transform: scale(1.14) translate3d(-1.2%, -1.6%, 0);
+    transform: scale(1.11) translate3d(-1%, -1.2%, 0);
   }
 }
 
@@ -521,10 +381,7 @@
   }
 
   .caustics::before,
-  .caustics::after,
-  .marquee-track,
-  .text-metal,
-  .text-chrome {
+  .marquee-track {
     animation: none !important;
   }
 

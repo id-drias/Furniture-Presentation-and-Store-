@@ -124,7 +124,7 @@ export function CartDrawer() {
             initial="hidden"
             animate="visible"
             exit="exit"
-            className="glass-deep edge-metal edge-metal-on relative z-10 flex h-full w-full max-w-[470px] flex-col bg-white shadow-[var(--shadow-drawer)]"
+            className="glass-deep relative z-10 flex h-full w-full max-w-[470px] flex-col bg-white shadow-[var(--shadow-drawer)]"
           >
             {/* ----------------------- header ----------------------- */}
             <header className="hairline-b flex items-center justify-between px-6 py-5">
@@ -295,7 +295,7 @@ export function CartDrawer() {
                                 />
                                 <button
                                   onClick={() => remove(line.productId)}
-                                  className="tap-clean text-[0.75rem] text-ink-faint underline-offset-4 transition-colors duration-300 hover:text-gold-deep hover:underline"
+                                  className="tap-clean text-[0.75rem] text-ink-faint underline-offset-4 transition-colors duration-300 hover:text-obsidian hover:underline"
                                 >
                                   {t("remove", locale)}
                                 </button>
@@ -341,7 +341,7 @@ export function CartDrawer() {
                           initial={{ opacity: 0, y: -6 }}
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0 }}
-                          className="text-[0.8125rem] text-gold-deep"
+                          className="text-[0.8125rem] text-obsidian"
                         >
                           {error}
                         </motion.p>
@@ -376,7 +376,7 @@ export function CartDrawer() {
                     </div>
                     <div className="flex justify-between">
                       <dt className="text-ink-soft">{t("whiteGlove", locale)}</dt>
-                      <dd className="text-gold-deep">{t("included", locale)}</dd>
+                      <dd className="text-obsidian">{t("included", locale)}</dd>
                     </div>
                     <div className="hairline-t flex justify-between pt-3">
                       <dt className="font-medium text-obsidian">{t("total", locale)}</dt>
@@ -494,8 +494,8 @@ function Field({
   autoComplete?: string;
 }) {
   const shared =
-    "w-full rounded-2xl bg-ceramic px-4 py-3.5 text-[0.875rem] text-obsidian placeholder:text-ink-ghost " +
-    "transition-shadow duration-300 focus:outline-none focus:ring-1 focus:ring-obsidian/15";
+ "w-full rounded-2xl bg-ceramic px-4 py-3.5 text-[0.875rem] text-obsidian placeholder:text-ink-ghost " +
+ "transition-shadow duration-300 focus:outline-none focus:ring-1 focus:ring-obsidian/15";
 
   return (
     <label className="block">

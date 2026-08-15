@@ -169,27 +169,18 @@ export function HeroVideoBackground({
         className="absolute inset-0"
         style={{
           background:
-            "radial-gradient(120% 85% at 50% 45%, transparent 30%, rgba(8,12,22,0.55) 78%, rgba(8,12,22,0.9) 100%)",
+            "radial-gradient(120% 85% at 50% 45%, transparent 34%, rgba(8,12,22,0.5) 80%, rgba(8,12,22,0.85) 100%)",
         }}
       />
-      {/* Warm light spill from the off-frame window, tying the footage to
-          the champagne accent used everywhere else. */}
-      <div
-        aria-hidden
-        className="spill spill-gold left-[-10%] top-[6%] h-[46vh] w-[46vh] opacity-40"
-      />
-      <div
-        aria-hidden
-        className="spill spill-bronze bottom-[-8%] right-[-6%] h-[40vh] w-[40vh] opacity-30"
-      />
-
       {/* ---------------------- controls ---------------------- */}
       {useVideo && (
         <motion.div
-          className="absolute bottom-5 right-5 z-40 flex items-center gap-2 sm:bottom-7 sm:right-7"
+          className="absolute bottom-6 left-6 z-40 flex items-center gap-2 sm:bottom-10 sm:left-10"
           initial={{ opacity: 0, y: 12 }}
+          /* Nearly invisible until the pointer is in the frame. The
+             control should be findable, not present. */
           animate={{
-            opacity: controlsVisible ? 1 : 0.42,
+            opacity: controlsVisible ? 1 : 0.3,
             y: 0,
           }}
           transition={spring}
@@ -244,7 +235,7 @@ function ControlButton({
       whileHover={{ scale: 1.08 }}
       whileTap={{ scale: 0.92 }}
       transition={springSnappy}
-      className="glass-dark tap-clean edge-metal grid h-10 w-10 place-items-center rounded-full text-white/90 transition-colors duration-300 hover:text-white"
+      className="glass-dark tap-clean grid h-11 w-11 place-items-center rounded-full text-white/80 transition-colors duration-500 hover:bg-white/[0.16] hover:text-white"
     >
       {children}
     </motion.button>

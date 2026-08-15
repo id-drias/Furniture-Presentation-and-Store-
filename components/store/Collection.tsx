@@ -5,15 +5,20 @@ import { AnimatePresence, motion } from "motion/react";
 import { ProductCard } from "@/components/store/ProductCard";
 import { Reveal, Stagger, StaggerItem } from "@/components/ui/Reveal";
 import { useStore, type FilterId } from "@/components/providers/StoreProvider";
-import { categories } from "@/lib/furnitureData";
+import { categories } from "@/lib/productsData";
 import { spring, springSnappy } from "@/lib/motion";
 import { t } from "@/lib/i18n";
 
 /* ------------------------------------------------------------------ *
  * The Collection.
  *
- * A bento grid with a sticky filter rail. Filtering is a liquid
- * layout transition (`layout` + popLayout), not a re-render flash.
+ * A bento grid under a sticky filter rail. Filtering is a liquid layout
+ * transition (`layout` + popLayout), not a re-render flash.
+ *
+ * The section's spatial rhythm carries the page: masthead, a long pause,
+ * the rail, another pause, then the grid. Row gap is deliberately far
+ * larger than column gap — vertical air is what makes a grid read as a
+ * gallery hang rather than a product listing.
  * ------------------------------------------------------------------ */
 
 export function Collection() {
@@ -28,29 +33,17 @@ export function Collection() {
     <section
       id="collection"
       /* `overflow-clip`, never `overflow-hidden`: hidden makes this a
-         scroll container and kills `position: sticky` on the filter rail
-         inside it. clip contains the light spills without that cost. */
-      className="relative scroll-mt-28 overflow-clip bg-white pb-28 pt-24 sm:pb-36 sm:pt-32"
+         scroll container and kills `position: sticky` on the rail. */
+      className="relative scroll-mt-32 overflow-clip bg-white py-[var(--space-section)]"
     >
-      {/* ambient light spill — decorative, sits under everything */}
-      <div
-        aria-hidden
-        className="spill spill-gold -left-[12%] top-[8%] h-[52vh] w-[52vh] opacity-[0.35]"
-      />
-      <div
-        aria-hidden
-        className="spill spill-bronze -right-[10%] top-[45%] h-[46vh] w-[46vh] opacity-25"
-      />
-
-      <div className="relative mx-auto w-full max-w-[1480px] px-5 sm:px-8">
+      <div className="mx-auto w-full max-w-[1480px] px-6 sm:px-10">
         {/* --------------------------- masthead --------------------------- */}
-        <Stagger stagger={0.08} className="max-w-4xl">
+        <Stagger stagger={0.09} className="max-w-4xl">
           <StaggerItem>
-            <p className="eyebrow">{t("collectionEyebrow", locale)}</p>
-            <div className="rule-metal mt-4 w-16" />
+            <p className="label">{t("collectionEyebrow", locale)}</p>
           </StaggerItem>
 
-          <StaggerItem display className="mt-7">
+          <StaggerItem display className="mt-10">
             <h2 className="display-section text-obsidian">
               {t("collectionTitle", locale)}{" "}
               <span className="accent-serif text-ink-faint">
@@ -59,18 +52,21 @@ export function Collection() {
             </h2>
           </StaggerItem>
 
-          <StaggerItem className="mt-6">
-            <p className="max-w-[52ch] text-pretty text-[0.9375rem] leading-relaxed text-ink-soft">
+          <StaggerItem className="mt-9">
+            <p className="max-w-[50ch] text-pretty text-[0.9375rem] leading-[1.7] text-ink-soft">
               {t("collectionSub", locale)}
             </p>
           </StaggerItem>
         </Stagger>
 
-        {/* ---------------------------- filters ---------------------------- */}
-        <Reveal className="sticky top-[86px] z-[60] -mx-5 mt-12 px-5 sm:-mx-8 sm:px-8 sm:mt-14">
-          <div className="glass flex items-center justify-between gap-4 rounded-full py-1.5 pl-1.5 pr-4 sm:pr-5">
+        {/* ---------------------------- filters ---------------------------- *
+         * The moving indicator is a hairline underline rather than a filled
+         * pill — the smallest thing that can still say "you are here".
+         * ------------------------------------------------------------------ */}
+        <Reveal className="sticky top-[92px] z-[60] -mx-6 mt-[var(--space-block)] px-6 sm:-mx-10 sm:px-10">
+          <div className="glass flex items-center justify-between gap-6 rounded-full py-2 pl-3 pr-6">
             <div
-              className="scrollbar-none flex items-center gap-0.5 overflow-x-auto"
+              className="scrollbar-none flex items-center gap-1 overflow-x-auto"
               role="tablist"
               aria-label={t("filterLabel", locale)}
             >
@@ -82,20 +78,18 @@ export function Collection() {
                     role="tab"
                     aria-selected={active}
                     onClick={() => setFilter(cat.id as FilterId)}
-                    className={`tap-clean relative shrink-0 rounded-full px-4 py-2.5 text-[13px] font-medium tracking-[-0.01em] transition-colors duration-300 sm:px-5 ${
-                      active ? "text-onyx" : "text-ink-soft hover:text-obsidian"
+                    className={`tap-clean relative shrink-0 rounded-full px-5 py-2.5 text-[0.8125rem] font-medium tracking-[-0.005em] transition-colors duration-500 ${
+                      active ? "text-obsidian" : "text-ink-faint hover:text-ink-soft"
                     }`}
                   >
+                    {cat.label[locale]}
                     {active && (
-                      /* The one piece of struck metal in the whole grid.
-                         It moves, so the eye reads it as the control. */
                       <motion.span
-                        layoutId="filter-pill"
-                        className="absolute inset-0 -z-10 rounded-full bg-[linear-gradient(100deg,#a8842a_0%,#d4af37_22%,#f6ecc4_48%,#d4af37_70%,#b0763d_100%)] shadow-[inset_0_1px_0_rgba(255,255,255,0.6),0_0_28px_rgba(212,175,55,0.42)]"
+                        layoutId="filter-underline"
+                        className="absolute inset-x-5 bottom-1 h-px bg-obsidian"
                         transition={springSnappy}
                       />
                     )}
-                    {cat.label[locale]}
                   </button>
                 );
               })}
@@ -103,10 +97,10 @@ export function Collection() {
 
             <motion.span
               key={visible.length}
-              initial={{ opacity: 0, y: -6 }}
-              animate={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
               transition={spring}
-              className="tnum hidden shrink-0 text-[11px] font-medium uppercase tracking-[0.16em] text-ink-faint sm:block"
+              className="tnum label hidden shrink-0 text-[10px] sm:block"
             >
               {visible.length}{" "}
               {visible.length === 1 ? t("resultsOne", locale) : t("resultsMany", locale)}
@@ -115,13 +109,7 @@ export function Collection() {
         </Reveal>
 
         {/* ----------------------------- grid ----------------------------- */}
-        {/* The grid container must stay a plain <div>. Giving it `layout`
-            makes motion animate the container's own box with a scale
-            transform, which both distorts the tiles (they inherit a
-            counter-scale) and fights popLayout's measurement of exiting
-            children — the exit never settles and filtered-out tiles stay
-            mounted. Per-tile `layout` is what moves them into place. */}
-        <div className="mt-10 grid grid-cols-1 gap-x-5 gap-y-12 [grid-auto-flow:dense] sm:mt-14 sm:grid-cols-2 sm:gap-y-14 lg:grid-cols-6">
+        <div className="mt-[var(--space-block)] grid grid-cols-1 gap-x-6 gap-y-24 [grid-auto-flow:dense] sm:grid-cols-2 sm:gap-y-28 lg:grid-cols-6">
           <AnimatePresence mode="popLayout" initial={false}>
             {visible.map((product, i) => (
               <ProductCard
@@ -138,7 +126,7 @@ export function Collection() {
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="py-24 text-center text-sm text-ink-faint"
+            className="py-32 text-center text-sm text-ink-faint"
           >
             {t("empty", locale)}
           </motion.p>

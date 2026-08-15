@@ -5,7 +5,7 @@ import { motion } from "motion/react";
 import { MagneticButton } from "@/components/ui/Magnetic";
 import { Reveal, Stagger, StaggerItem } from "@/components/ui/Reveal";
 import { useStore, type FilterId } from "@/components/providers/StoreProvider";
-import { categories } from "@/lib/furnitureData";
+import { categories } from "@/lib/productsData";
 import { spring, viewportOnce } from "@/lib/motion";
 import { t } from "@/lib/i18n";
 import type { DictKey } from "@/lib/i18n";
@@ -42,7 +42,7 @@ export function Footer() {
   };
 
   return (
-    <footer className="grain relative overflow-hidden bg-white pt-24 sm:pt-32">
+    <footer className="grain relative overflow-hidden bg-white pt-[var(--space-section)]">
       <div className="mx-auto w-full max-w-[1480px] px-5 sm:px-8">
         {/* ------------------------- top block ------------------------- */}
         <div className="grid gap-14 lg:grid-cols-12 lg:gap-10">
@@ -58,7 +58,7 @@ export function Footer() {
           {/* studios */}
           <Stagger className="lg:col-span-3">
             <StaggerItem>
-              <p className="eyebrow">{t("studios", locale)}</p>
+              <p className="label">{t("studios", locale)}</p>
             </StaggerItem>
             <div className="mt-6 space-y-5">
               {STUDIOS.map((s) => (
@@ -77,7 +77,7 @@ export function Footer() {
           <Stagger className="grid grid-cols-2 gap-8 lg:col-span-4">
             <div>
               <StaggerItem>
-                <p className="eyebrow">{t("collectionCol", locale)}</p>
+                <p className="label">{t("collectionCol", locale)}</p>
               </StaggerItem>
               <ul className="mt-6 space-y-3">
                 {categories.map((cat) => (
@@ -97,7 +97,7 @@ export function Footer() {
 
             <div>
               <StaggerItem>
-                <p className="eyebrow">{t("houseCol", locale)}</p>
+                <p className="label">{t("houseCol", locale)}</p>
               </StaggerItem>
               <ul className="mt-6 space-y-3">
                 {HOUSE.map((key) => (

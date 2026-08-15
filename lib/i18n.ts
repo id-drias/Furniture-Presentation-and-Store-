@@ -1,7 +1,7 @@
 import type { Locale, Localized } from "./types";
 
 /* ------------------------------------------------------------------ *
- * Interface copy. Product prose lives in furnitureData.ts; this file
+ * Interface copy. Product prose lives in productsData.ts; this file
  * holds the chrome — navigation, store controls, drawer, footer.
  * ------------------------------------------------------------------ */
 

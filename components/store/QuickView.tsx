@@ -141,7 +141,7 @@ function QuickViewPanel({
           </AnimatePresence>
 
           {product.edition && (
-            <span className="glass absolute left-4 top-4 rounded-full px-3 py-1.5 text-[9px] font-semibold uppercase tracking-[0.18em] text-gold-deep">
+            <span className="glass absolute left-4 top-4 rounded-full px-3 py-1.5 text-[9px] font-semibold uppercase tracking-[0.18em] text-obsidian">
               {product.edition}
             </span>
           )}
@@ -169,7 +169,7 @@ function QuickViewPanel({
       {/* -------------------------- details -------------------------- */}
       <div className="flex min-h-0 flex-1 flex-col">
         <div className="min-h-0 flex-1 overflow-y-auto px-6 pb-4 pt-8 sm:px-9 sm:pt-12">
-          <p className="eyebrow">{product.collection}</p>
+          <p className="label">{product.collection}</p>
 
           <h2 className="display mt-4 text-[clamp(2rem,4.4vw,3rem)] text-obsidian">
             {product.name}
@@ -183,7 +183,7 @@ function QuickViewPanel({
             {formatPrice(product.price, locale)}
           </p>
 
-          <div className="rule-metal my-8" />
+          <div className="rule my-10" />
 
           <p className="max-w-[52ch] text-pretty text-[0.875rem] leading-[1.75] text-ink-soft">
             {product.story[locale]}
@@ -222,7 +222,7 @@ function QuickViewPanel({
                       aria-hidden
                     />
                     <span className="min-w-0">
-                      <span className="block text-[0.8125rem] font-medium tracking-[-0.01em] text-obsidian transition-colors duration-300 group-hover:text-gold-deep">
+                      <span className="block text-[0.8125rem] font-medium tracking-[-0.01em] text-obsidian transition-colors duration-300 group-hover:text-obsidian">
                         {m.name[locale]}
                       </span>
                       <span className="mt-0.5 block text-pretty text-[0.75rem] leading-relaxed text-ink-faint">
@@ -325,7 +325,7 @@ function ExpandableSpec({
         className="tap-clean group flex w-full items-center justify-between gap-4 py-5 text-left"
       >
         <span className="flex items-center gap-3">
-          <span className="eyebrow text-[10px] transition-colors duration-400 group-hover:text-gold-deep">
+          <span className="label text-[10px] transition-colors duration-400 group-hover:text-obsidian">
             {title}
           </span>
           {count !== undefined && (
@@ -380,7 +380,7 @@ function Metric({
       </p>
       <p
         className={`tnum mt-1.5 text-[0.9375rem] font-medium tracking-[-0.015em] ${
-          accent ? "text-gold-deep" : "text-obsidian"
+          accent ? "text-obsidian" : "text-obsidian"
         }`}
       >
         {value}

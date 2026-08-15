@@ -5,7 +5,7 @@ import Image from "next/image";
 import { motion, useScroll, useSpring, useTransform } from "motion/react";
 import { AmbientVideo } from "@/components/ui/AmbientVideo";
 import { useStore } from "@/components/providers/StoreProvider";
-import { editorial } from "@/lib/furnitureData";
+import { editorial } from "@/lib/productsData";
 import { springScroll, viewportOnce } from "@/lib/motion";
 import { t } from "@/lib/i18n";
 
@@ -54,7 +54,7 @@ export function Manifesto() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={viewportOnce}
           transition={{ duration: 0.7 }}
-          className="eyebrow !text-white/45"
+          className="label !text-white/45"
         >
           {t("manifestoEyebrow", locale)}
         </motion.p>
@@ -76,7 +76,7 @@ export function Manifesto() {
           transition={{ delay: 0.4, duration: 0.6 }}
           className="mt-12 flex flex-col items-center gap-4"
         >
-          <span className="rule-metal w-20" />
+          <span className="h-px w-24 bg-white/25" />
           <p className="text-[11px] font-medium uppercase tracking-[0.22em] text-white/55">
             {t("manifestoAttr", locale)}
           </p>
@@ -91,12 +91,12 @@ export function Manifesto() {
  * ------------------------------------------------------------------ */
 
 const ETHOS = [
-  "Milano — 1974",
-  "Thirty-one makers",
-  "One collection a year",
-  "Repaired, never replaced",
-  "Nine hands per piece",
-  "30-year warranty",
+ "Milano — 1974",
+ "Thirty-one makers",
+ "One collection a year",
+ "Repaired, never replaced",
+ "Nine hands per piece",
+ "30-year warranty",
 ];
 
 export function EthosMarquee() {
@@ -110,7 +110,7 @@ export function EthosMarquee() {
                 <span className="text-[11px] font-medium uppercase tracking-[0.24em] text-ink-faint">
                   {item}
                 </span>
-                <span className="h-1 w-1 rounded-full bg-champagne" />
+                <span className="h-1 w-1 rounded-full bg-ink-ghost" />
               </span>
             ))}
           </div>

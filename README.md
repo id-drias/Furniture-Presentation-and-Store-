@@ -3,9 +3,15 @@
 An editorial brand showcase and interactive furniture gallery, built as a single
 scrolling page. Next.js App Router · TypeScript · Tailwind v4 · motion.dev.
 
-Alabaster canvas, ceramic surfaces, obsidian type, champagne metal. One serif
-italic carries the accent half of every headline; everything else is Inter at
-tight tracking.
+**Quiet luxury.** Alabaster canvas, architectural ceramic surfaces, obsidian
+type, and 0.5px champagne rules. There is no glow, no gradient fill and no
+animated sheen anywhere in the system — expense is carried by three things
+only: the scale of the type, the amount of emptiness around it, and the
+precision of a half-pixel line.
+
+Two typographic registers and nothing between them: monumental display
+(`-0.052em`, up to 12rem) against a small tracked-out technical label
+(11px / `0.2em` / uppercase). The gap between those two *is* the design.
 
 ---
 
@@ -35,7 +41,8 @@ app/
   api/products/route.ts   GET  — catalogue, filtering, search, single lookup
   api/checkout/route.ts   POST — orders & consultations, re-priced server-side
 lib/
-  furnitureData.ts        the catalogue — single source of truth
+  productsData.ts         the catalogue — single source of truth
+  imageLoader.ts          delegates photography to the Unsplash CDN
   types.ts  i18n.ts  format.ts  motion.ts  media.ts  hooks.ts
 components/
   providers/StoreProvider.tsx   locale · catalogue · cart · overlays
@@ -45,10 +52,11 @@ components/
   ui/                           Magnetic, TiltPlate, Reveal, AmbientVideo
 ```
 
-**One motion vocabulary.** Every transition in the build comes from
-`lib/motion.ts` (house spring: `stiffness: 100, damping: 20`). No component
-hand-rolls a transition, which is what makes a card hover, a drawer and a filter
-reflow feel like the same physical material.
+**One motion vocabulary.** Every transition comes from `lib/motion.ts` (house
+spring: `stiffness: 90, damping: 22, mass: 0.8`). No component hand-rolls a
+transition, which is what makes a card hover, a drawer and a filter reflow feel
+like the same physical material. The low stiffness lengthens the travel so
+movement reads as considered; the reduced mass stops that from feeling sluggish.
 
 **The catalogue drives everything.** Both API routes and the whole storefront
 read `lib/furnitureData.ts`. Array order is *bento order* — the `tile`

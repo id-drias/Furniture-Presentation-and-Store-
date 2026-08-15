@@ -4,7 +4,7 @@ import {
   products,
   productsByCategory,
   searchProducts,
-} from "@/lib/furnitureData";
+} from "@/lib/productsData";
 import type { Product, ProductsResponse } from "@/lib/types";
 
 /* ------------------------------------------------------------------ *

@@ -105,8 +105,8 @@ export function GlassHeader() {
       <header className="pointer-events-none fixed inset-x-0 top-0 z-[120]">
         <div className="mx-auto w-full max-w-[1480px] px-3 sm:px-5">
           <motion.div
-            className={`edge-metal pointer-events-auto relative mt-3 flex items-center justify-between rounded-full transition-[background,border-color,box-shadow] duration-700 sm:mt-4 ${
-              onDark ? "glass-dark edge-metal-on" : "glass"
+            className={`pointer-events-auto relative mt-4 flex items-center justify-between rounded-full transition-[background,border-color,box-shadow] duration-700 sm:mt-5 ${
+              onDark ? "glass-dark" : "glass"
             }`}
             animate={{
               height: condensed ? 56 : 66,
@@ -127,9 +127,7 @@ export function GlassHeader() {
             >
               <motion.span
                 className={`grid place-items-center rounded-full transition-colors duration-700 ${
-                  onDark
-                    ? "bg-[linear-gradient(135deg,#d4af37,#f6ecc4_45%,#b0763d)] text-onyx"
-                    : "bg-obsidian text-white"
+                  onDark ? "bg-white text-onyx" : "bg-obsidian text-white"
                 }`}
                 animate={{ width: condensed ? 26 : 30, height: condensed ? 26 : 30 }}
                 transition={spring}
@@ -212,7 +210,7 @@ export function GlassHeader() {
               style={{
                 scaleX: progress,
                 background:
-                  "linear-gradient(90deg, transparent, var(--color-gold), var(--color-gold-light))",
+                  "linear-gradient(90deg, transparent, var(--color-champagne))",
               }}
             />
           </motion.div>
@@ -267,9 +265,7 @@ function LocaleToggle({
             <motion.span
               layoutId="locale-pill"
               className={`absolute inset-0 -z-10 rounded-full ${
-                onDark
-                  ? "bg-[linear-gradient(120deg,#e8d9a0,#ffffff_55%,#d4af37)]"
-                  : "bg-white shadow-[0_1px_2px_rgba(15,23,42,0.10)]"
+                onDark ? "bg-white" : "bg-white shadow-[0_1px_2px_rgba(15,23,42,0.08)]"
               }`}
               transition={springSnappy}
             />
@@ -335,7 +331,7 @@ function CartButton({
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0, opacity: 0 }}
             transition={springSnappy}
-            className="tnum absolute -right-0.5 -top-0.5 grid h-[18px] min-w-[18px] place-items-center rounded-full bg-[linear-gradient(120deg,#d4af37,#f6ecc4_50%,#b0763d)] px-1 text-[10px] font-semibold leading-none text-onyx shadow-[0_0_16px_rgba(212,175,55,0.55)] ring-2 ring-white/70"
+            className="tnum absolute -right-0.5 -top-0.5 grid h-[17px] min-w-[17px] place-items-center rounded-full bg-obsidian px-1 text-[10px] font-medium leading-none text-white ring-2 ring-white"
           >
             <motion.span
               key={pulse}
@@ -385,7 +381,7 @@ function MobileMenu({
 
           <div
             aria-hidden
-            className="spill spill-gold absolute -right-16 top-10 h-72 w-72 opacity-40"
+            className="hidden absolute -right-16 top-10 h-72 w-72 opacity-40"
           />
 
           <button
@@ -416,8 +412,8 @@ function MobileMenu({
                 </span>
               </motion.button>
             ))}
-            <motion.div variants={riseInDisplay} className="rule-metal mt-8 w-full" />
-            <motion.p variants={riseInDisplay} className="eyebrow mt-6">
+            <motion.div variants={riseInDisplay} className="rule mt-10 w-full" />
+            <motion.p variants={riseInDisplay} className="label mt-6">
               {t("heroEyebrow", locale)}
             </motion.p>
           </motion.nav>

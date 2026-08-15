@@ -4,7 +4,7 @@ import { useRef } from "react";
 import Image from "next/image";
 import { motion, useScroll, useSpring, useTransform } from "motion/react";
 import { useStore } from "@/components/providers/StoreProvider";
-import { editorial } from "@/lib/furnitureData";
+import { editorial } from "@/lib/productsData";
 import { springScroll } from "@/lib/motion";
 import type { Locale, Localized } from "@/lib/types";
 
@@ -94,7 +94,7 @@ function PinnedChapter({
         {/* ambient bloom behind the plate */}
         <div
           aria-hidden
-          className={`spill spill-gold top-[12%] h-[60vh] w-[60vh] opacity-30 ${
+          className={`hidden top-[12%] h-[60vh] w-[60vh] opacity-30 ${
             flip ? "right-[-14%]" : "left-[-14%]"
           }`}
         />
@@ -138,8 +138,8 @@ function PinnedChapter({
             style={{ opacity: copyOpacity, y: copyY }}
             className={`lg:col-span-5 ${flip ? "lg:order-1 lg:col-start-1" : ""}`}
           >
-            <p className="eyebrow">{chapter.eyebrow[locale]}</p>
-            <div className="rule-metal mt-4 w-16" />
+            <p className="label">{chapter.eyebrow[locale]}</p>
+            <div className="rule mt-6 w-20" />
 
             <h2 className="display-section mt-6 text-obsidian">
               {chapter.title[locale]}

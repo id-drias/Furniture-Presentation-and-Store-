@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto";
 import { NextResponse } from "next/server";
-import { productById } from "@/lib/furnitureData";
+import { productById } from "@/lib/productsData";
 import { currencyFor, priceIn } from "@/lib/format";
 import type {
   CartLine,

@@ -6,7 +6,7 @@ import { motion } from "motion/react";
 import { AmbientVideo } from "@/components/ui/AmbientVideo";
 import { Stagger, StaggerItem } from "@/components/ui/Reveal";
 import { useStore } from "@/components/providers/StoreProvider";
-import { editorial } from "@/lib/furnitureData";
+import { editorial } from "@/lib/productsData";
 import { spring } from "@/lib/motion";
 import { t } from "@/lib/i18n";
 import { useFinePointer } from "@/lib/hooks";
@@ -27,15 +27,15 @@ export function Craftsmanship() {
   return (
     <section
       id="atelier"
-      className="grain relative scroll-mt-28 overflow-hidden bg-ceramic py-24 sm:py-32"
+      className="grain relative scroll-mt-32 overflow-hidden bg-ceramic py-[var(--space-section)]"
     >
       <AmbientVideo slot="materialReveal" opacity={0.5} blend="soft-light" />
 
       <div className="relative mx-auto w-full max-w-[1480px] px-5 sm:px-8">
         <Stagger stagger={0.08} className="max-w-3xl">
           <StaggerItem>
-            <p className="eyebrow">{t("craftEyebrow", locale)}</p>
-            <div className="rule-metal mt-4 w-16" />
+            <p className="label">{t("craftEyebrow", locale)}</p>
+            <div className="rule mt-6 w-20" />
           </StaggerItem>
 
           <StaggerItem display className="mt-7">

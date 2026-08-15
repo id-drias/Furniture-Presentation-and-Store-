@@ -65,7 +65,7 @@ export function Magnetic({ children, strength = 14, className = "" }: MagneticPr
  * The house button. Pill, hairline, champagne on the dark variant.
  * ------------------------------------------------------------------ */
 
-type Variant = "solid" | "outline" | "ghost" | "metal" | "glass";
+type Variant = "solid" | "outline" | "ghost" | "glass";
 type Size = "md" | "lg";
 
 interface ButtonProps
@@ -78,29 +78,29 @@ interface ButtonProps
 }
 
 const base =
-  "tap-clean relative inline-flex items-center justify-center gap-2 rounded-full font-medium " +
-  "tracking-[-0.01em] transition-colors duration-300 disabled:opacity-40 disabled:pointer-events-none " +
+  "tap-clean relative inline-flex items-center justify-center gap-2.5 rounded-full font-medium " +
+  "tracking-[0.01em] transition-colors duration-500 disabled:opacity-40 disabled:pointer-events-none " +
   "whitespace-nowrap select-none";
 
+/*
+ * Four variants, no fills beyond flat ink. The previous pass had a
+ * struck-metal gradient here; a gold button is the fastest way to make
+ * a page look like it is selling something rather than showing it.
+ */
 const variants: Record<Variant, string> = {
-  solid:
-    "bg-obsidian text-white hover:bg-[#1c2740] shadow-[0_1px_2px_rgba(15,23,42,0.16),0_16px_36px_-16px_rgba(15,23,42,0.55)]",
+  solid: "bg-obsidian text-white hover:bg-[#1a2436]",
   outline:
-    "bg-white/70 text-obsidian hairline backdrop-blur-xl hover:bg-white hover:border-[rgba(15,23,42,0.16)]",
-  ghost: "text-obsidian hover:bg-obsidian/[0.05]",
-  /* Struck metal: a real gradient fill with a bright specular band, dark
-     ink on top for contrast, and a gold light-spill that blooms on hover. */
-  metal:
-    "text-onyx bg-[linear-gradient(100deg,#a8842a_0%,#d4af37_20%,#f6ecc4_46%,#d4af37_66%,#b0763d_100%)] " +
-    "shadow-[inset_0_1px_0_rgba(255,255,255,0.65),0_10px_30px_-12px_rgba(212,175,55,0.7)] " +
-    "hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.8),0_0_35px_rgba(212,175,55,0.4),0_12px_34px_-12px_rgba(212,175,55,0.8)]",
-  /* For placement over footage. */
-  glass: "glass-dark edge-metal edge-metal-on text-white hover:text-white",
+    "bg-transparent text-obsidian hairline hover:border-[rgba(15,23,42,0.22)]",
+  ghost: "text-obsidian hover:bg-obsidian/[0.04]",
+  /* Over footage. */
+  glass: "glass-dark text-white hover:bg-white/[0.16]",
 };
 
+/* Taller and wider than before. A button with generous internal margin
+   reads as considered; a tight one reads as a control. */
 const sizes: Record<Size, string> = {
-  md: "h-11 px-6 text-[0.875rem]",
-  lg: "h-14 px-8 text-[0.9375rem]",
+  md: "h-12 px-7 text-[0.8125rem]",
+  lg: "h-[3.75rem] px-10 text-[0.875rem]",
 };
 
 export function MagneticButton({
@@ -119,8 +119,8 @@ export function MagneticButton({
     <motion.a
       href={href}
       className={cls}
-      whileHover={{ scale: 1.025 }}
-      whileTap={{ scale: 0.975 }}
+      whileHover={{ scale: 1.015 }}
+      whileTap={{ scale: 0.985 }}
       transition={springSnappy}
     >
       {children}
@@ -128,8 +128,8 @@ export function MagneticButton({
   ) : (
     <motion.button
       className={cls}
-      whileHover={{ scale: 1.025 }}
-      whileTap={{ scale: 0.975 }}
+      whileHover={{ scale: 1.015 }}
+      whileTap={{ scale: 0.985 }}
       transition={springSnappy}
       {...rest}
     >

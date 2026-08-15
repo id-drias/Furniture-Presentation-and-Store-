@@ -5,7 +5,7 @@ import { GlassHeader } from "@/components/chrome/GlassHeader";
 import { CursorHalo } from "@/components/chrome/CursorHalo";
 import { CartDrawer } from "@/components/store/CartDrawer";
 import { QuickView } from "@/components/store/QuickView";
-import { products } from "@/lib/furnitureData";
+import { products } from "@/lib/productsData";
 import "./globals.css";
 
 /* Sans for everything structural; the serif carries the accent half of
@@ -31,19 +31,19 @@ export const metadata: Metadata = {
     template: "%s — Aetheria Atelier",
   },
   description:
-    "A workshop of thirty-one makers outside Milan. One collection a year: bouclé seating, travertine tables, brushed brass lighting and book-matched walnut case goods.",
+ "A workshop of thirty-one makers outside Milan. One collection a year: bouclé seating, travertine tables, brushed brass lighting and book-matched walnut case goods.",
   keywords: [
-    "luxury furniture",
-    "bouclé sofa",
-    "travertine table",
-    "brass lighting",
-    "walnut cabinet",
-    "Milan atelier",
+ "luxury furniture",
+ "bouclé sofa",
+ "travertine table",
+ "brass lighting",
+ "walnut cabinet",
+ "Milan atelier",
   ],
   openGraph: {
     title: "Aetheria Atelier — Sculpted Comfort. Timeless Forms.",
     description:
-      "Furniture drawn once, built to be repaired rather than replaced. One collection a year, from a workshop outside Milan.",
+ "Furniture drawn once, built to be repaired rather than replaced. One collection a year, from a workshop outside Milan.",
     type: "website",
     locale: "en_US",
     siteName: "Aetheria Atelier",

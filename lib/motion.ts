@@ -11,33 +11,35 @@ import type { Transition, Variants } from "motion/react";
 /**
  * House spring. Everything defaults to this.
  *
- * Raised from 100/20 to 120/24: the extra stiffness makes the settle
- * quicker and more decisive, and the matching damping bump keeps it
- * critically-damped enough that nothing wobbles at the end. Faster and
- * *tighter* — a loose overshoot is the single clearest tell of a cheap
- * interface.
+ * 90 / 22 / 0.8. Softer than the previous pass and slightly lighter,
+ * which sounds contradictory until you watch it: the lower stiffness
+ * lengthens the travel so movement reads as *considered*, while the
+ * reduced mass keeps it from feeling sluggish. Damping 22 against
+ * stiffness 90 sits just under critical, so it settles cleanly with a
+ * trace of follow-through — the difference between a drawer that
+ * closes and a drawer that is closed by someone.
  */
 export const spring: Transition = {
   type: "spring",
-  stiffness: 120,
-  damping: 24,
-  mass: 1,
+  stiffness: 90,
+  damping: 22,
+  mass: 0.8,
 };
 
 /** Snappier variant for things attached to the pointer. */
 export const springSnappy: Transition = {
   type: "spring",
-  stiffness: 260,
+  stiffness: 240,
   damping: 26,
-  mass: 0.6,
+  mass: 0.5,
 };
 
 /** Heavier variant for large surfaces — drawers, modals, plates. */
 export const springHeavy: Transition = {
   type: "spring",
-  stiffness: 130,
-  damping: 26,
-  mass: 1.18,
+  stiffness: 80,
+  damping: 24,
+  mass: 1.1,
 };
 
 /** Slow, wide travel for parallax and depth layers. */
