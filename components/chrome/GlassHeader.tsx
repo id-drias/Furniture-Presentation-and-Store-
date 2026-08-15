@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   AnimatePresence,
   motion,
@@ -8,7 +8,11 @@ import {
   useScroll,
   useSpring,
 } from "motion/react";
-import { useScrollLock, useStore, type FilterId } from "@/components/providers/StoreProvider";
+import {
+  useScrollLock,
+  useStore,
+  type FilterId,
+} from "@/components/providers/StoreProvider";
 import { spring, springSnappy, staggerParent, riseInDisplay } from "@/lib/motion";
 import { t } from "@/lib/i18n";
 import type { DictKey } from "@/lib/i18n";
@@ -17,13 +21,14 @@ import type { Locale } from "@/lib/types";
 /* ------------------------------------------------------------------ *
  * Floating glass header.
  *
- * Condenses on scroll, carries the read-progress hairline, and its
- * category anchors drive the store grid rather than merely jumping.
+ * Two skins. Over the cinematic hero it is dark glass with white type;
+ * once the alabaster body arrives it crossfades to light glass. A single
+ * fixed skin would have to lose one of the two — and a light pill on
+ * near-black footage is the exact thing that makes a site look templated.
  * ------------------------------------------------------------------ */
 
 interface NavLink {
   key: DictKey;
-  /** Category to select in the grid, or null to jump only. */
   filter: FilterId | null;
   target: string;
 }
@@ -38,6 +43,7 @@ const NAV: NavLink[] = [
 export function GlassHeader() {
   const { locale, setLocale, itemCount, openCart, setFilter, addPulse } = useStore();
   const [condensed, setCondensed] = useState(false);
+  const [onDark, setOnDark] = useState(true);
   const [hovered, setHovered] = useState<string | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -48,9 +54,36 @@ export function GlassHeader() {
     restDelta: 0.001,
   });
 
-  useMotionValueEvent(scrollY, "change", (v) => {
+  const evaluate = useCallback((v: number) => {
     setCondensed(v > 24);
-  });
+    /* Hand over to the light skin just before the hero's last frame
+       leaves, so the swap happens against dark and reads as intentional. */
+    setOnDark(v < window.innerHeight * 0.82);
+  }, []);
+
+  useMotionValueEvent(scrollY, "change", evaluate);
+
+  /*
+   * A native listener backs up motion's rAF-driven scroll value, because
+   * this particular state is a legibility guarantee rather than a flourish:
+   * if the skin fails to swap, white type sits on the white body and the
+   * header becomes unreadable. Scroll events fire independently of the
+   * animation frame loop, so the fallback holds even when rAF is throttled
+   * (backgrounded tab, low-power mode, headless browser).
+   *
+   * Also resolves the skin on mount — deep links and refreshes can land
+   * mid-page, where waiting for a first scroll would be too late.
+   */
+  useEffect(() => {
+    const onScroll = () => evaluate(window.scrollY);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, [evaluate]);
 
   useScrollLock(menuOpen);
 
@@ -58,8 +91,6 @@ export function GlassHeader() {
     (link: NavLink) => {
       if (link.filter) setFilter(link.filter);
       setMenuOpen(false);
-      // Let the filter commit before the scroll starts, so the grid is
-      // already reflowing as the viewport arrives.
       requestAnimationFrame(() => {
         document
           .getElementById(link.target)
@@ -74,7 +105,9 @@ export function GlassHeader() {
       <header className="pointer-events-none fixed inset-x-0 top-0 z-[120]">
         <div className="mx-auto w-full max-w-[1480px] px-3 sm:px-5">
           <motion.div
-            className="glass pointer-events-auto relative mt-3 flex items-center justify-between rounded-full sm:mt-4"
+            className={`edge-metal pointer-events-auto relative mt-3 flex items-center justify-between rounded-full transition-[background,border-color,box-shadow] duration-700 sm:mt-4 ${
+              onDark ? "glass-dark edge-metal-on" : "glass"
+            }`}
             animate={{
               height: condensed ? 56 : 66,
               paddingLeft: condensed ? 18 : 24,
@@ -93,7 +126,11 @@ export function GlassHeader() {
               aria-label="Aetheria Atelier — home"
             >
               <motion.span
-                className="grid place-items-center rounded-full bg-obsidian text-white"
+                className={`grid place-items-center rounded-full transition-colors duration-700 ${
+                  onDark
+                    ? "bg-[linear-gradient(135deg,#d4af37,#f6ecc4_45%,#b0763d)] text-onyx"
+                    : "bg-obsidian text-white"
+                }`}
                 animate={{ width: condensed ? 26 : 30, height: condensed ? 26 : 30 }}
                 transition={spring}
               >
@@ -101,7 +138,11 @@ export function GlassHeader() {
                   Æ
                 </span>
               </motion.span>
-              <span className="hidden text-[11px] font-medium uppercase tracking-[0.3em] text-obsidian sm:block">
+              <span
+                className={`hidden text-[11px] font-medium uppercase tracking-[0.3em] transition-colors duration-700 sm:block ${
+                  onDark ? "text-white" : "text-obsidian"
+                }`}
+              >
                 Aetheria
               </span>
             </a>
@@ -116,12 +157,18 @@ export function GlassHeader() {
                   key={link.key}
                   onClick={() => go(link)}
                   onMouseEnter={() => setHovered(link.key)}
-                  className="tap-clean relative rounded-full px-4 py-2 text-[13px] font-medium tracking-[-0.01em] text-ink-soft transition-colors duration-300 hover:text-obsidian"
+                  className={`tap-clean relative rounded-full px-4 py-2 text-[13px] font-medium tracking-[-0.01em] transition-colors duration-500 ${
+                    onDark
+                      ? "text-white/70 hover:text-white"
+                      : "text-ink-soft hover:text-obsidian"
+                  }`}
                 >
                   {hovered === link.key && (
                     <motion.span
                       layoutId="nav-hover"
-                      className="absolute inset-0 -z-10 rounded-full bg-obsidian/[0.055]"
+                      className={`absolute inset-0 -z-10 rounded-full ${
+                        onDark ? "bg-white/12" : "bg-obsidian/[0.055]"
+                      }`}
                       transition={springSnappy}
                     />
                   )}
@@ -132,7 +179,7 @@ export function GlassHeader() {
 
             {/* ---------------- right cluster ---------------- */}
             <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
-              <LocaleToggle locale={locale} onSelect={setLocale} />
+              <LocaleToggle locale={locale} onSelect={setLocale} onDark={onDark} />
 
               <CartButton
                 count={itemCount}
@@ -140,12 +187,17 @@ export function GlassHeader() {
                 label={t("openCart", locale)}
                 onClick={openCart}
                 condensed={condensed}
+                onDark={onDark}
               />
 
               <button
                 onClick={() => setMenuOpen(true)}
                 aria-label={t("openMenu", locale)}
-                className="tap-clean grid h-9 w-9 place-items-center rounded-full text-obsidian transition-colors duration-300 hover:bg-obsidian/[0.055] lg:hidden"
+                className={`tap-clean grid h-9 w-9 place-items-center rounded-full transition-colors duration-500 lg:hidden ${
+                  onDark
+                    ? "text-white hover:bg-white/12"
+                    : "text-obsidian hover:bg-obsidian/[0.055]"
+                }`}
               >
                 <svg width="16" height="10" viewBox="0 0 16 10" fill="none" aria-hidden>
                   <path d="M0 1h16M0 9h11" stroke="currentColor" strokeWidth="1.35" />
@@ -160,7 +212,7 @@ export function GlassHeader() {
               style={{
                 scaleX: progress,
                 background:
-                  "linear-gradient(90deg, transparent, var(--color-champagne), var(--color-champagne-deep))",
+                  "linear-gradient(90deg, transparent, var(--color-gold), var(--color-gold-light))",
               }}
             />
           </motion.div>
@@ -182,13 +234,17 @@ export function GlassHeader() {
 function LocaleToggle({
   locale,
   onSelect,
+  onDark,
 }: {
   locale: Locale;
   onSelect: (l: Locale) => void;
+  onDark: boolean;
 }) {
   return (
     <div
-      className="relative flex items-center rounded-full bg-obsidian/[0.045] p-0.5"
+      className={`relative flex items-center rounded-full p-0.5 transition-colors duration-700 ${
+        onDark ? "bg-white/10" : "bg-obsidian/[0.045]"
+      }`}
       role="group"
       aria-label="Language"
     >
@@ -197,14 +253,24 @@ function LocaleToggle({
           key={code}
           onClick={() => onSelect(code)}
           aria-pressed={locale === code}
-          className={`tap-clean relative z-10 rounded-full px-2.5 py-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] transition-colors duration-300 ${
-            locale === code ? "text-obsidian" : "text-ink-faint hover:text-ink-soft"
+          className={`tap-clean relative z-10 rounded-full px-2.5 py-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] transition-colors duration-500 ${
+            locale === code
+              ? onDark
+                ? "text-onyx"
+                : "text-obsidian"
+              : onDark
+                ? "text-white/55 hover:text-white/85"
+                : "text-ink-faint hover:text-ink-soft"
           }`}
         >
           {locale === code && (
             <motion.span
               layoutId="locale-pill"
-              className="absolute inset-0 -z-10 rounded-full bg-white shadow-[0_1px_2px_rgba(15,23,42,0.10)]"
+              className={`absolute inset-0 -z-10 rounded-full ${
+                onDark
+                  ? "bg-[linear-gradient(120deg,#e8d9a0,#ffffff_55%,#d4af37)]"
+                  : "bg-white shadow-[0_1px_2px_rgba(15,23,42,0.10)]"
+              }`}
               transition={springSnappy}
             />
           )}
@@ -223,18 +289,24 @@ function CartButton({
   label,
   onClick,
   condensed,
+  onDark,
 }: {
   count: number;
   pulse: number;
   label: string;
   onClick: () => void;
   condensed: boolean;
+  onDark: boolean;
 }) {
   return (
     <motion.button
       onClick={onClick}
       aria-label={label}
-      className="tap-clean relative grid place-items-center rounded-full bg-obsidian text-white"
+      className={`tap-clean relative grid place-items-center rounded-full transition-colors duration-700 ${
+        onDark
+          ? "bg-white/14 text-white ring-1 ring-white/25 backdrop-blur-xl hover:bg-white/22"
+          : "bg-obsidian text-white"
+      }`}
       animate={{ width: condensed ? 36 : 40, height: condensed ? 36 : 40 }}
       whileHover={{ scale: 1.06 }}
       whileTap={{ scale: 0.94 }}
@@ -263,9 +335,14 @@ function CartButton({
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0, opacity: 0 }}
             transition={springSnappy}
-            className="tnum absolute -right-0.5 -top-0.5 grid h-[18px] min-w-[18px] place-items-center rounded-full bg-champagne-deep px-1 text-[10px] font-semibold leading-none text-white ring-2 ring-white"
+            className="tnum absolute -right-0.5 -top-0.5 grid h-[18px] min-w-[18px] place-items-center rounded-full bg-[linear-gradient(120deg,#d4af37,#f6ecc4_50%,#b0763d)] px-1 text-[10px] font-semibold leading-none text-onyx shadow-[0_0_16px_rgba(212,175,55,0.55)] ring-2 ring-white/70"
           >
-            <motion.span key={pulse} initial={{ scale: 1.5 }} animate={{ scale: 1 }} transition={springSnappy}>
+            <motion.span
+              key={pulse}
+              initial={{ scale: 1.5 }}
+              animate={{ scale: 1 }}
+              transition={springSnappy}
+            >
               {count}
             </motion.span>
           </motion.span>
@@ -306,10 +383,15 @@ function MobileMenu({
             transition={{ ...spring, stiffness: 90 }}
           />
 
+          <div
+            aria-hidden
+            className="spill spill-gold absolute -right-16 top-10 h-72 w-72 opacity-40"
+          />
+
           <button
             onClick={onClose}
             aria-label={t("closeMenu", locale)}
-            className="tap-clean absolute right-6 top-6 z-10 grid h-11 w-11 place-items-center rounded-full hairline bg-white/70"
+            className="tap-clean hairline absolute right-6 top-6 z-10 grid h-11 w-11 place-items-center rounded-full bg-white/70"
           >
             <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden>
               <path d="M1 1l11 11M12 1L1 12" stroke="currentColor" strokeWidth="1.35" />
@@ -335,10 +417,7 @@ function MobileMenu({
               </motion.button>
             ))}
             <motion.div variants={riseInDisplay} className="rule-metal mt-8 w-full" />
-            <motion.p
-              variants={riseInDisplay}
-              className="eyebrow mt-6"
-            >
+            <motion.p variants={riseInDisplay} className="eyebrow mt-6">
               {t("heroEyebrow", locale)}
             </motion.p>
           </motion.nav>

@@ -8,11 +8,19 @@ import type { Transition, Variants } from "motion/react";
  * and a filter reflow feeling like the same physical material.
  * ------------------------------------------------------------------ */
 
-/** House spring. Everything defaults to this. */
+/**
+ * House spring. Everything defaults to this.
+ *
+ * Raised from 100/20 to 120/24: the extra stiffness makes the settle
+ * quicker and more decisive, and the matching damping bump keeps it
+ * critically-damped enough that nothing wobbles at the end. Faster and
+ * *tighter* — a loose overshoot is the single clearest tell of a cheap
+ * interface.
+ */
 export const spring: Transition = {
   type: "spring",
-  stiffness: 100,
-  damping: 20,
+  stiffness: 120,
+  damping: 24,
   mass: 1,
 };
 
@@ -27,10 +35,13 @@ export const springSnappy: Transition = {
 /** Heavier variant for large surfaces — drawers, modals, plates. */
 export const springHeavy: Transition = {
   type: "spring",
-  stiffness: 120,
-  damping: 22,
-  mass: 1.1,
+  stiffness: 130,
+  damping: 26,
+  mass: 1.18,
 };
+
+/** Slow, wide travel for parallax and depth layers. */
+export const springDepth = { stiffness: 90, damping: 28, restDelta: 0.001 };
 
 /** For scroll-linked values, where a spring smooths raw scroll input. */
 export const springScroll = { stiffness: 100, damping: 30, restDelta: 0.001 };

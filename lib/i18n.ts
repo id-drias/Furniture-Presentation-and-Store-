@@ -27,10 +27,17 @@ export const dictionary = {
     en: "Thirty-one makers. One workshop outside Milan. Furniture drawn once, built to be repaired rather than replaced.",
     fr: "Trente-et-un artisans. Un atelier près de Milan. Un mobilier dessiné une fois, conçu pour être réparé plutôt que remplacé.",
   },
-  heroCta: { en: "Explore the Collection", fr: "Découvrir la collection" },
+  heroCta: { en: "Explore Collection", fr: "Voir la collection" },
+  heroCtaTour: { en: "Virtual Studio Tour", fr: "Visite virtuelle" },
   heroCtaAlt: { en: "Book the Atelier", fr: "Réserver l'atelier" },
   scrollHint: { en: "Scroll", fr: "Défiler" },
   dragHint: { en: "Drag to orbit", fr: "Faites glisser pour pivoter" },
+
+  /* hero spec badges */
+  badgeFounded: { en: "Milano · 1974", fr: "Milan · 1974" },
+  badgeMakers: { en: "31 makers", fr: "31 artisans" },
+  badgeRun: { en: "One collection a year", fr: "Une collection par an" },
+  badgeWarranty: { en: "30-year warranty", fr: "Garantie 30 ans" },
 
   /* collection */
   collectionEyebrow: { en: "The Gallery & Collection", fr: "La galerie et la collection" },

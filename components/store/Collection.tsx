@@ -25,8 +25,24 @@ export function Collection() {
   );
 
   return (
-    <section id="collection" className="relative scroll-mt-28 bg-white pb-28 pt-24 sm:pb-36 sm:pt-32">
-      <div className="mx-auto w-full max-w-[1480px] px-5 sm:px-8">
+    <section
+      id="collection"
+      /* `overflow-clip`, never `overflow-hidden`: hidden makes this a
+         scroll container and kills `position: sticky` on the filter rail
+         inside it. clip contains the light spills without that cost. */
+      className="relative scroll-mt-28 overflow-clip bg-white pb-28 pt-24 sm:pb-36 sm:pt-32"
+    >
+      {/* ambient light spill — decorative, sits under everything */}
+      <div
+        aria-hidden
+        className="spill spill-gold -left-[12%] top-[8%] h-[52vh] w-[52vh] opacity-[0.35]"
+      />
+      <div
+        aria-hidden
+        className="spill spill-bronze -right-[10%] top-[45%] h-[46vh] w-[46vh] opacity-25"
+      />
+
+      <div className="relative mx-auto w-full max-w-[1480px] px-5 sm:px-8">
         {/* --------------------------- masthead --------------------------- */}
         <Stagger stagger={0.08} className="max-w-4xl">
           <StaggerItem>
@@ -67,13 +83,15 @@ export function Collection() {
                     aria-selected={active}
                     onClick={() => setFilter(cat.id as FilterId)}
                     className={`tap-clean relative shrink-0 rounded-full px-4 py-2.5 text-[13px] font-medium tracking-[-0.01em] transition-colors duration-300 sm:px-5 ${
-                      active ? "text-white" : "text-ink-soft hover:text-obsidian"
+                      active ? "text-onyx" : "text-ink-soft hover:text-obsidian"
                     }`}
                   >
                     {active && (
+                      /* The one piece of struck metal in the whole grid.
+                         It moves, so the eye reads it as the control. */
                       <motion.span
                         layoutId="filter-pill"
-                        className="absolute inset-0 -z-10 rounded-full bg-obsidian"
+                        className="absolute inset-0 -z-10 rounded-full bg-[linear-gradient(100deg,#a8842a_0%,#d4af37_22%,#f6ecc4_48%,#d4af37_70%,#b0763d_100%)] shadow-[inset_0_1px_0_rgba(255,255,255,0.6),0_0_28px_rgba(212,175,55,0.42)]"
                         transition={springSnappy}
                       />
                     )}

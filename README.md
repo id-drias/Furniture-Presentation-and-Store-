@@ -75,13 +75,20 @@ The site ships complete with a **pure-CSS caustics field**, so it is beautiful
 with zero external media. Three slots in `lib/media.ts` upgrade themselves to
 real video the moment you give them a URL — no component edits:
 
-All three slots are wired:
+All four slots are wired:
 
-| Slot | Used by | File | Blend |
+| Slot | Used by | File | Treatment |
 | --- | --- | --- | --- |
-| `heroCaustics` | `sections/Hero` | `/media/hero-caustics.mp4` | `screen` @ 0.9 |
+| `heroInterior` | `HeroVideoBackground` | `/media/hero-interior.mp4` | full-bleed, dark grade @ 0.56 |
 | `materialReveal` | `sections/Craftsmanship` | `/media/material-macro.mp4` | `soft-light` @ 0.5 |
 | `manifestoLoop` | `sections/Manifesto` | `/media/manifesto-atelier.mp4` | `soft-light` @ 0.28 |
+| `heroCaustics` | *(unused — kept for reuse)* | `/media/hero-caustics.mp4` | `screen` @ 0.9 |
+
+Each slot declares `hasAudio`. It is authored, never probed: the
+`webkitAudioDecodedByteCount` family is non-standard, engine-specific and only
+meaningful after playback starts, so probing yields a mute button that either
+arrives late or sits there toggling nothing. The hero renders its unmute
+control only when the wired clip actually carries audio.
 
 Generated with Seedance 1.5 Pro at 854×480, 4 s, silent. The low resolution is
 deliberate — each layer is blended at low opacity, so it reads as a light field
@@ -123,9 +130,26 @@ Connect the repo in Netlify and accept the detected settings, or:
 netlify deploy --build --prod
 ```
 
-Photography is hot-linked from the Unsplash CDN and re-optimised through the
-Next image pipeline; `images.unsplash.com` is already allow-listed in
-`next.config.ts`.
+### Images bypass the Next optimizer on purpose
+
+Photography is served straight from the Unsplash CDN through a custom
+`next/image` loader ([lib/imageLoader.ts](lib/imageLoader.ts)), not re-encoded
+locally by sharp.
+
+Unsplash is already an image CDN — it resizes, re-encodes and negotiates
+AVIF/WebP from `w` / `q` / `auto=format`. Routing through Next's optimizer
+meant downloading a 1600–2400px original and re-encoding it per request:
+**0.7–2.2 s per image on a cold cache**, against ~20 photographs on the page.
+Because `next/image` also lazy-loads, scrolling produced a trail of empty
+frames — indistinguishable from broken images.
+
+Delegating to the origin removes that work entirely: nothing to encode, no
+`.next/cache/images`, instant in dev, and no Netlify function invocation per
+image in production. `deviceSizes` is also trimmed from 8 breakpoints to 5,
+since each one multiplies every srcset.
+
+If you ever point `img()` at a non-Unsplash host, the loader passes the URL
+through untouched — add the host to `remotePatterns` and it keeps working.
 
 ---
 

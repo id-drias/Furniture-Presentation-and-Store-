@@ -3,14 +3,23 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   images: {
-    // Editorial photography is hot-linked from Unsplash's CDN and re-optimised
-    // by the Next image pipeline (served through Netlify's image CDN in prod).
+    /*
+     * Photography is delegated to the Unsplash CDN via a custom loader
+     * rather than re-encoded locally by sharp. Re-optimising a 2400px
+     * original per request cost 0.7–2.2s each on a cold cache, so the
+     * page's ~20 photographs landed long after its text — indistinguishable
+     * from broken images. See lib/imageLoader.ts.
+     */
+    loader: "custom",
+    loaderFile: "./lib/imageLoader.ts",
+    /* Trimmed from 8 breakpoints to 5: each one multiplies the srcset,
+       and the gaps between these are already below a visible step. */
+    deviceSizes: [640, 1080, 1600, 1920, 2560],
+    imageSizes: [48, 96, 200, 384],
     remotePatterns: [
       { protocol: "https", hostname: "images.unsplash.com" },
       { protocol: "https", hostname: "plus.unsplash.com" },
     ],
-    formats: ["image/avif", "image/webp"],
-    deviceSizes: [420, 640, 828, 1080, 1280, 1600, 1920, 2560],
   },
   // Deliberately not using `experimental.optimizePackageImports` for
   // "motion": the barrel rewrite is an experimental transform and this

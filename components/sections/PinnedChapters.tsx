@@ -74,8 +74,10 @@ function PinnedChapter({
   const plateY = useTransform(p, [0, 1], [64, -48]);
   const plateRadius = useTransform(p, [0, 0.42], [56, 28]);
 
-  /* inner photo: slow counter-push, so the crop breathes */
-  const photoScale = useTransform(p, [0, 1], [1.22, 1.02]);
+  /* inner photo: slow counter-push plus vertical drift, so the crop
+     breathes and the image moves against its own frame */
+  const photoScale = useTransform(p, [0, 1], [1.28, 1.04]);
+  const photoY = useTransform(p, [0, 1], ["-6%", "6%"]);
 
   /* copy */
   const copyOpacity = useTransform(p, [0.06, 0.24, 0.86, 1], [0, 1, 1, 0]);
@@ -89,6 +91,13 @@ function PinnedChapter({
   return (
     <div ref={ref} className="relative h-[240vh]">
       <div className="sticky top-0 flex h-[100svh] items-center overflow-hidden">
+        {/* ambient bloom behind the plate */}
+        <div
+          aria-hidden
+          className={`spill spill-gold top-[12%] h-[60vh] w-[60vh] opacity-30 ${
+            flip ? "right-[-14%]" : "left-[-14%]"
+          }`}
+        />
         {/* watermark numeral */}
         <motion.span
           aria-hidden
@@ -106,7 +115,10 @@ function PinnedChapter({
               flip ? "lg:order-2 lg:col-start-6" : ""
             }`}
           >
-            <motion.div style={{ scale: photoScale }} className="absolute inset-0">
+            <motion.div
+              style={{ scale: photoScale, y: photoY }}
+              className="absolute inset-0"
+            >
               <Image
                 src={chapter.image}
                 alt=""

@@ -2,7 +2,13 @@
 
 /* ==================================================================== *
  * AETHERIA ATELIER — DESIGN TOKENS
- * Alabaster canvas · ceramic surfaces · obsidian type · champagne metal
+ *
+ * Alabaster canvas · ceramic surfaces · obsidian type · struck metal.
+ *
+ * The metallic layer is deliberately *conditional*. At rest a card is a
+ * hairline on white; the gold edge, the light spill and the specular
+ * bloom arrive on hover, on scroll, on focus. Opulence that responds
+ * reads expensive — opulence that shouts constantly reads cheap.
  * ==================================================================== */
 
 @theme {
@@ -14,14 +20,21 @@
 
   /* --- ink --- */
   --color-obsidian: #0f172a;
+  --color-onyx: #080c16;
   --color-ink-soft: #475569;
   --color-ink-faint: #94a3b8;
   --color-ink-ghost: #cbd5e1;
 
-  /* --- metal --- */
+  /* --- struck metal --- */
+  --color-gold: #d4af37;
+  --color-gold-light: #f0e2ab;
+  --color-gold-deep: #a8842a;
   --color-champagne: #c2a87c;
-  --color-champagne-deep: #a3854f;
   --color-champagne-pale: #efe6d4;
+  --color-bronze: #b0763d;
+  --color-bronze-deep: #7d5326;
+  --color-chrome: #dfe3e8;
+  --color-chrome-deep: #9aa3ad;
   --color-platinum: #d9d6d0;
 
   /* --- type --- */
@@ -29,14 +42,29 @@
     BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
   --font-display: var(--font-instrument), "Times New Roman", Georgia, serif;
 
-  /* --- elevation: soft, layered, never a drop shadow --- */
+  /* --- elevation --- */
   --shadow-plate: 0 1px 2px rgba(15, 23, 42, 0.04),
     0 12px 32px -12px rgba(15, 23, 42, 0.1);
   --shadow-lift: 0 2px 4px rgba(15, 23, 42, 0.04),
     0 28px 60px -20px rgba(15, 23, 42, 0.18);
-  --shadow-glass: 0 1px 1px rgba(255, 255, 255, 0.7) inset,
-    0 8px 32px -8px rgba(15, 23, 42, 0.12);
   --shadow-drawer: -32px 0 80px -24px rgba(15, 23, 42, 0.24);
+
+  /* Multi-layer specular glass: a bright top edge, a dimmer bottom
+     reflection, then the cast shadow. Three layers is what separates
+     "frosted panel" from "a piece of polished glass". */
+  --shadow-gloss: inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.4),
+    inset 0 0 24px rgba(255, 255, 255, 0.28),
+    0 8px 32px -8px rgba(15, 23, 42, 0.14);
+
+  --shadow-gloss-dark: inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.06),
+    inset 0 0 32px rgba(255, 255, 255, 0.05),
+    0 12px 40px -12px rgba(0, 0, 0, 0.6);
+
+  /* --- light spill (the exact value from the brief) --- */
+  --glow-gold: 0 0 35px rgba(212, 175, 55, 0.15);
+  --glow-gold-strong: 0 0 60px rgba(212, 175, 55, 0.28);
 
   /* --- motion --- */
   --ease-apple: cubic-bezier(0.22, 0.61, 0.36, 1);
@@ -49,7 +77,6 @@
 @layer base {
   html {
     scroll-behavior: smooth;
-    /* clear the floating glass header on anchor jumps */
     scroll-padding-top: 7.5rem;
     -webkit-text-size-adjust: 100%;
   }
@@ -61,24 +88,22 @@
     font-feature-settings: "cv02", "cv03", "cv04", "ss01";
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    /* `clip` (not `hidden`) — `hidden` would create a scroll container and
-       break every position:sticky pinned section on the page. */
+    /* `clip`, never `hidden` — `hidden` creates a scroll container and
+       breaks every position:sticky pinned section on the page. */
     overflow-x: clip;
   }
 
   ::selection {
-    background: var(--color-champagne-pale);
+    background: var(--color-gold-light);
     color: var(--color-obsidian);
   }
 
-  /* Hairline focus ring that matches the metal accent. */
   :focus-visible {
-    outline: 2px solid var(--color-champagne-deep);
+    outline: 2px solid var(--color-gold-deep);
     outline-offset: 3px;
     border-radius: 4px;
   }
 
-  /* Slim, near-invisible scrollbar. */
   * {
     scrollbar-width: thin;
     scrollbar-color: var(--color-ink-ghost) transparent;
@@ -95,7 +120,6 @@
     background: transparent;
   }
 
-  /* Numerals stay tabular anywhere they can shift layout. */
   .tnum,
   input[type="number"] {
     font-variant-numeric: tabular-nums;
@@ -104,11 +128,10 @@
 
 /* ==================================================================== *
  * COMPONENTS
- * In @layer components so Tailwind utilities can still override them.
  * ==================================================================== */
 
 @layer components {
-  /* --- Editorial display type ------------------------------------- */
+  /* --- Editorial display type -------------------------------------- */
 
   .display {
     font-weight: 600;
@@ -117,22 +140,22 @@
     text-wrap: balance;
   }
 
+  /* Museum scale. Runs to 13rem on a wide desktop. */
   .display-hero {
     font-weight: 600;
-    letter-spacing: -0.05em;
-    line-height: 0.86;
-    font-size: clamp(3rem, 10.5vw, 10.5rem);
+    letter-spacing: -0.055em;
+    line-height: 0.84;
+    font-size: clamp(3.25rem, 11.5vw, 13rem);
   }
 
   .display-section {
     font-weight: 600;
-    letter-spacing: -0.042em;
-    line-height: 0.92;
-    font-size: clamp(2.25rem, 6.2vw, 5.25rem);
+    letter-spacing: -0.045em;
+    line-height: 0.9;
+    font-size: clamp(2.5rem, 7vw, 6.5rem);
     text-wrap: balance;
   }
 
-  /* The serif italic that carries the accent half of every headline. */
   .accent-serif {
     font-family: var(--font-display);
     font-style: italic;
@@ -146,6 +169,42 @@
     letter-spacing: 0.26em;
     text-transform: uppercase;
     color: var(--color-ink-faint);
+  }
+
+  /* --- Struck-metal text ------------------------------------------- */
+  /* Impact words only. A whole headline in gradient reads as a logo, and
+     a logo the size of a wall reads as a casino. */
+
+  .text-metal {
+    background: linear-gradient(
+      100deg,
+      var(--color-gold-deep) 0%,
+      var(--color-gold) 22%,
+      #fbf3d5 44%,
+      var(--color-gold) 62%,
+      var(--color-bronze) 82%,
+      var(--color-gold-deep) 100%
+    );
+    background-size: 220% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: sheen 11s ease-in-out infinite;
+  }
+
+  .text-chrome {
+    background: linear-gradient(
+      100deg,
+      var(--color-chrome-deep),
+      #ffffff 42%,
+      var(--color-chrome) 58%,
+      var(--color-chrome-deep)
+    );
+    background-size: 220% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: sheen 13s ease-in-out infinite;
   }
 
   /* --- Surfaces ---------------------------------------------------- */
@@ -164,60 +223,136 @@
     border-bottom: 1px solid rgba(15, 23, 42, 0.08);
   }
 
-  /* Horizontal rails scroll, but the bar itself is noise. */
-  .scrollbar-none {
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-  }
-  .scrollbar-none::-webkit-scrollbar {
-    display: none;
-  }
-
+  /* High-gloss glass. */
   .glass {
-    background: rgba(255, 255, 255, 0.72);
-    backdrop-filter: blur(24px) saturate(180%);
-    -webkit-backdrop-filter: blur(24px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.75);
-    box-shadow: var(--shadow-glass);
+    background: linear-gradient(
+      160deg,
+      rgba(255, 255, 255, 0.82) 0%,
+      rgba(255, 255, 255, 0.66) 100%
+    );
+    backdrop-filter: blur(28px) saturate(190%);
+    -webkit-backdrop-filter: blur(28px) saturate(190%);
+    border: 1px solid rgba(255, 255, 255, 0.85);
+    box-shadow: var(--shadow-gloss);
   }
 
   .glass-deep {
-    background: rgba(255, 255, 255, 0.86);
-    backdrop-filter: blur(40px) saturate(190%);
-    -webkit-backdrop-filter: blur(40px) saturate(190%);
+    background: linear-gradient(
+      160deg,
+      rgba(255, 255, 255, 0.93) 0%,
+      rgba(255, 255, 255, 0.84) 100%
+    );
+    backdrop-filter: blur(44px) saturate(200%);
+    -webkit-backdrop-filter: blur(44px) saturate(200%);
   }
 
-  /* Brushed-metal rule used under eyebrows and section breaks. */
+  /* Glass over dark footage — the hero control cluster and spec chips. */
+  .glass-dark {
+    background: linear-gradient(
+      160deg,
+      rgba(255, 255, 255, 0.16) 0%,
+      rgba(255, 255, 255, 0.07) 100%
+    );
+    backdrop-filter: blur(24px) saturate(170%);
+    -webkit-backdrop-filter: blur(24px) saturate(170%);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    box-shadow: var(--shadow-gloss-dark);
+  }
+
+  /* --- Specular metal edge ----------------------------------------- */
+  /* A true gradient border: paint the gradient in the 1px padding ring
+     and mask out the middle. Hidden at rest, bloomed by .group:hover. */
+
+  .edge-metal {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .edge-metal::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(
+      140deg,
+      rgba(212, 175, 55, 0.95) 0%,
+      rgba(240, 226, 171, 0.5) 26%,
+      rgba(255, 255, 255, 0) 52%,
+      rgba(176, 118, 61, 0.55) 78%,
+      rgba(212, 175, 55, 0.9) 100%
+    );
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.55s var(--ease-apple);
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .edge-metal-on::after,
+  .group:hover .edge-metal::after,
+  .group:focus-visible .edge-metal::after {
+    opacity: 1;
+  }
+
+  /* --- Light spill -------------------------------------------------- */
+
+  .glow-gold {
+    filter: drop-shadow(0 0 35px rgba(212, 175, 55, 0.15));
+  }
+
+  .glow-gold-hover {
+    transition: filter 0.6s var(--ease-apple);
+  }
+  .group:hover .glow-gold-hover {
+    filter: drop-shadow(0 0 35px rgba(212, 175, 55, 0.15));
+  }
+
+  /* Ambient bloom placed behind a section. Purely decorative. */
+  .spill {
+    position: absolute;
+    pointer-events: none;
+    border-radius: 9999px;
+    filter: blur(90px);
+    opacity: 0.5;
+  }
+  .spill-gold {
+    background: radial-gradient(
+      circle,
+      rgba(212, 175, 55, 0.4) 0%,
+      rgba(212, 175, 55, 0) 70%
+    );
+  }
+  .spill-bronze {
+    background: radial-gradient(
+      circle,
+      rgba(176, 118, 61, 0.32) 0%,
+      rgba(176, 118, 61, 0) 70%
+    );
+  }
+
+  /* Brushed rule. */
   .rule-metal {
     height: 1px;
     background: linear-gradient(
       90deg,
       transparent,
-      var(--color-champagne) 18%,
-      var(--color-platinum) 50%,
-      var(--color-champagne) 82%,
+      var(--color-gold) 18%,
+      var(--color-gold-light) 50%,
+      var(--color-gold) 82%,
       transparent
     );
-    opacity: 0.55;
+    opacity: 0.7;
   }
 
-  .text-metal {
-    background: linear-gradient(
-      100deg,
-      var(--color-champagne-deep),
-      var(--color-champagne) 30%,
-      #efe6d4 48%,
-      var(--color-champagne) 66%,
-      var(--color-champagne-deep)
-    );
-    background-size: 200% 100%;
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    animation: sheen 9s ease-in-out infinite;
-  }
-
-  /* --- Film grain: the single cheapest luxury cue there is --------- */
+  /* --- Film grain --------------------------------------------------- */
 
   .grain::after {
     content: "";
@@ -228,9 +363,25 @@
     mix-blend-mode: multiply;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E");
     background-size: 240px 240px;
+    z-index: 30;
   }
 
-  /* --- Caustics: the zero-dependency ambient light field ----------- */
+  /* Grain over footage: screen-blended so it lifts rather than muddies,
+     and heavier, because grain is what makes 480p upscaling read as
+     "cinematic" instead of "low resolution". */
+  .grain-film::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.11;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23f)'/%3E%3C/svg%3E");
+    background-size: 200px 200px;
+    z-index: 20;
+  }
+
+  /* --- Caustics fallback -------------------------------------------- */
 
   .caustics {
     position: absolute;
@@ -252,8 +403,8 @@
       ),
       radial-gradient(
         30% 26% at 72% 22%,
-        rgba(239, 230, 212, 0.85) 0%,
-        rgba(239, 230, 212, 0) 60%
+        rgba(240, 226, 171, 0.85) 0%,
+        rgba(240, 226, 171, 0) 60%
       ),
       radial-gradient(
         44% 34% at 58% 74%,
@@ -271,7 +422,7 @@
     opacity: 0.7;
   }
 
-  /* --- Utility bits ------------------------------------------------ */
+  /* --- Utility bits -------------------------------------------------- */
 
   .plate {
     box-shadow: var(--shadow-plate);
@@ -280,15 +431,21 @@
     box-shadow: var(--shadow-lift);
   }
 
-  /* Kills the blue tap flash on iOS without killing focus rings. */
   .tap-clean {
     -webkit-tap-highlight-color: transparent;
   }
 
-  /* Perspective root for the tilting product plates. */
   .stage-3d {
     perspective: 1400px;
     transform-style: preserve-3d;
+  }
+
+  .scrollbar-none {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
   }
 }
 
@@ -343,9 +500,19 @@
   animation: marquee 46s linear infinite;
 }
 
+/* Very slow ken-burns under the hero footage, so a 4s loop still feels
+   like it is going somewhere. */
+@keyframes hero-drift {
+  0% {
+    transform: scale(1.06) translate3d(0, 0, 0);
+  }
+  100% {
+    transform: scale(1.14) translate3d(-1.2%, -1.6%, 0);
+  }
+}
+
 /* ==================================================================== *
  * REDUCED MOTION
- * Ambient loops stop entirely; entrances collapse to a plain fade.
  * ==================================================================== */
 
 @media (prefers-reduced-motion: reduce) {
@@ -356,7 +523,8 @@
   .caustics::before,
   .caustics::after,
   .marquee-track,
-  .text-metal {
+  .text-metal,
+  .text-chrome {
     animation: none !important;
   }
 

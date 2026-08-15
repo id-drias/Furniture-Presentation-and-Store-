@@ -124,7 +124,7 @@ export function CartDrawer() {
             initial="hidden"
             animate="visible"
             exit="exit"
-            className="relative z-10 flex h-full w-full max-w-[470px] flex-col bg-white shadow-[var(--shadow-drawer)]"
+            className="glass-deep edge-metal edge-metal-on relative z-10 flex h-full w-full max-w-[470px] flex-col bg-white shadow-[var(--shadow-drawer)]"
           >
             {/* ----------------------- header ----------------------- */}
             <header className="hairline-b flex items-center justify-between px-6 py-5">
@@ -167,7 +167,7 @@ export function CartDrawer() {
                       initial={{ scale: 0.6, opacity: 0 }}
                       animate={{ scale: 1, opacity: 1 }}
                       transition={{ ...spring, delay: 0.1 }}
-                      className="grid h-14 w-14 place-items-center rounded-full bg-champagne-pale text-champagne-deep"
+                      className="grid h-14 w-14 place-items-center rounded-full bg-[linear-gradient(135deg,#f6ecc4,#d4af37)] text-onyx shadow-[0_0_35px_rgba(212,175,55,0.45)]"
                     >
                       <svg width="18" height="14" viewBox="0 0 18 14" fill="none" aria-hidden>
                         <path
@@ -295,7 +295,7 @@ export function CartDrawer() {
                                 />
                                 <button
                                   onClick={() => remove(line.productId)}
-                                  className="tap-clean text-[0.75rem] text-ink-faint underline-offset-4 transition-colors duration-300 hover:text-champagne-deep hover:underline"
+                                  className="tap-clean text-[0.75rem] text-ink-faint underline-offset-4 transition-colors duration-300 hover:text-gold-deep hover:underline"
                                 >
                                   {t("remove", locale)}
                                 </button>
@@ -341,7 +341,7 @@ export function CartDrawer() {
                           initial={{ opacity: 0, y: -6 }}
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0 }}
-                          className="text-[0.8125rem] text-champagne-deep"
+                          className="text-[0.8125rem] text-gold-deep"
                         >
                           {error}
                         </motion.p>
@@ -376,7 +376,7 @@ export function CartDrawer() {
                     </div>
                     <div className="flex justify-between">
                       <dt className="text-ink-soft">{t("whiteGlove", locale)}</dt>
-                      <dd className="text-champagne-deep">{t("included", locale)}</dd>
+                      <dd className="text-gold-deep">{t("included", locale)}</dd>
                     </div>
                     <div className="hairline-t flex justify-between pt-3">
                       <dt className="font-medium text-obsidian">{t("total", locale)}</dt>

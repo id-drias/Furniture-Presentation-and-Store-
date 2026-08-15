@@ -141,7 +141,7 @@ function QuickViewPanel({
           </AnimatePresence>
 
           {product.edition && (
-            <span className="glass absolute left-4 top-4 rounded-full px-3 py-1.5 text-[9px] font-semibold uppercase tracking-[0.18em] text-champagne-deep">
+            <span className="glass absolute left-4 top-4 rounded-full px-3 py-1.5 text-[9px] font-semibold uppercase tracking-[0.18em] text-gold-deep">
               {product.edition}
             </span>
           )}
@@ -190,8 +190,8 @@ function QuickViewPanel({
           </p>
 
           {/* dimensions */}
-          <SpecBlock title={t("dimensions", locale)}>
-            <div className="grid grid-cols-2 gap-x-8 sm:grid-cols-4">
+          <ExpandableSpec title={t("dimensions", locale)} defaultOpen>
+            <div className="grid grid-cols-2 gap-x-8 gap-y-5 sm:grid-cols-4">
               <Metric label={t("width", locale)} value={formatCm(d.w, locale)} />
               <Metric label={t("depth", locale)} value={formatCm(d.d, locale)} />
               <Metric label={t("height", locale)} value={formatCm(d.h, locale)} />
@@ -199,10 +199,14 @@ function QuickViewPanel({
                 <Metric label={t("seatHeight", locale)} value={formatCm(d.seat, locale)} />
               )}
             </div>
-          </SpecBlock>
+          </ExpandableSpec>
 
           {/* materials */}
-          <SpecBlock title={t("materials", locale)}>
+          <ExpandableSpec
+            title={t("materials", locale)}
+            count={product.materials.length}
+            defaultOpen
+          >
             <ul className="space-y-0">
               {product.materials.map((m, i) => (
                 <li key={m.name.en}>
@@ -218,7 +222,7 @@ function QuickViewPanel({
                       aria-hidden
                     />
                     <span className="min-w-0">
-                      <span className="block text-[0.8125rem] font-medium tracking-[-0.01em] text-obsidian transition-colors duration-300 group-hover:text-champagne-deep">
+                      <span className="block text-[0.8125rem] font-medium tracking-[-0.01em] text-obsidian transition-colors duration-300 group-hover:text-gold-deep">
                         {m.name[locale]}
                       </span>
                       <span className="mt-0.5 block text-pretty text-[0.75rem] leading-relaxed text-ink-faint">
@@ -229,10 +233,10 @@ function QuickViewPanel({
                 </li>
               ))}
             </ul>
-          </SpecBlock>
+          </ExpandableSpec>
 
           {/* availability */}
-          <div className="hairline-t mt-8 grid grid-cols-2 gap-6 pt-6">
+          <div className="hairline-t grid grid-cols-2 gap-6 pt-6">
             <Metric label={t("leadTime", locale)} value={product.leadTime[locale]} />
             <Metric
               label={t("availability", locale)}
@@ -293,11 +297,69 @@ function QuickViewPanel({
 
 /* -------------------------------- bits -------------------------------- */
 
-function SpecBlock({ title, children }: { title: string; children: React.ReactNode }) {
+/* ------------------------------------------------------------------ *
+ * Expandable spec sheet.
+ *
+ * Height animates from a measured `auto`, so a section with three
+ * materials and one with one both open at their own natural size — no
+ * magic max-height, nothing clipped.
+ * ------------------------------------------------------------------ */
+function ExpandableSpec({
+  title,
+  count,
+  defaultOpen = false,
+  children,
+}: {
+  title: string;
+  count?: number;
+  defaultOpen?: boolean;
+  children: React.ReactNode;
+}) {
+  const [open, setOpen] = useState(defaultOpen);
+
   return (
-    <div className="mt-9">
-      <p className="eyebrow mb-4 text-[10px]">{title}</p>
-      {children}
+    <div className="hairline-t mt-0 first:border-t-0">
+      <button
+        onClick={() => setOpen((v) => !v)}
+        aria-expanded={open}
+        className="tap-clean group flex w-full items-center justify-between gap-4 py-5 text-left"
+      >
+        <span className="flex items-center gap-3">
+          <span className="eyebrow text-[10px] transition-colors duration-400 group-hover:text-gold-deep">
+            {title}
+          </span>
+          {count !== undefined && (
+            <span className="tnum rounded-full bg-obsidian/[0.05] px-2 py-0.5 text-[10px] font-medium text-ink-faint">
+              {count}
+            </span>
+          )}
+        </span>
+
+        <motion.span
+          animate={{ rotate: open ? 45 : 0 }}
+          transition={springSnappy}
+          className="grid h-6 w-6 shrink-0 place-items-center rounded-full text-ink-faint transition-colors duration-400 group-hover:bg-[linear-gradient(120deg,#d4af37,#f6ecc4_50%,#b0763d)] group-hover:text-onyx"
+        >
+          <svg width="9" height="9" viewBox="0 0 10 10" fill="none" aria-hidden>
+            <path d="M5 0v10M0 5h10" stroke="currentColor" strokeWidth="1.4" />
+          </svg>
+        </motion.span>
+      </button>
+
+      <AnimatePresence initial={false}>
+        {open && (
+          <motion.div
+            key="body"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={spring}
+            className="overflow-hidden"
+          >
+            <div className="pb-6">{children}</div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
@@ -318,7 +380,7 @@ function Metric({
       </p>
       <p
         className={`tnum mt-1.5 text-[0.9375rem] font-medium tracking-[-0.015em] ${
-          accent ? "text-champagne-deep" : "text-obsidian"
+          accent ? "text-gold-deep" : "text-obsidian"
         }`}
       >
         {value}

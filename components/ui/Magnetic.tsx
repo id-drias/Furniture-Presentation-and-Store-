@@ -65,7 +65,7 @@ export function Magnetic({ children, strength = 14, className = "" }: MagneticPr
  * The house button. Pill, hairline, champagne on the dark variant.
  * ------------------------------------------------------------------ */
 
-type Variant = "solid" | "outline" | "ghost";
+type Variant = "solid" | "outline" | "ghost" | "metal" | "glass";
 type Size = "md" | "lg";
 
 interface ButtonProps
@@ -88,6 +88,14 @@ const variants: Record<Variant, string> = {
   outline:
     "bg-white/70 text-obsidian hairline backdrop-blur-xl hover:bg-white hover:border-[rgba(15,23,42,0.16)]",
   ghost: "text-obsidian hover:bg-obsidian/[0.05]",
+  /* Struck metal: a real gradient fill with a bright specular band, dark
+     ink on top for contrast, and a gold light-spill that blooms on hover. */
+  metal:
+    "text-onyx bg-[linear-gradient(100deg,#a8842a_0%,#d4af37_20%,#f6ecc4_46%,#d4af37_66%,#b0763d_100%)] " +
+    "shadow-[inset_0_1px_0_rgba(255,255,255,0.65),0_10px_30px_-12px_rgba(212,175,55,0.7)] " +
+    "hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.8),0_0_35px_rgba(212,175,55,0.4),0_12px_34px_-12px_rgba(212,175,55,0.8)]",
+  /* For placement over footage. */
+  glass: "glass-dark edge-metal edge-metal-on text-white hover:text-white",
 };
 
 const sizes: Record<Size, string> = {
